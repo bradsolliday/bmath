@@ -18,17 +18,42 @@ pub fn gcd(mut m: u64, mut n: u64) -> u64 {
 
 /// Returns (d, a, b) where d is the gcd of n and m, and
 /// a and b such that a*m + b*n = d.
-/// Precondition: m and n are positive. 
+/// # Precondition
+/// m and n are positive. 
 ///
 /// # Example
 ///
 /// ```
 /// use bmath::algo::gcd_factors;
-/// let result = gcd_factors(25, 15);
-/// assert_eq!(result, (5, 2, -3));
+/// use std::cmp::min;
+/// let (m, n) = (25, 15);
+/// let (d, a, b) = gcd_factors(m, n);
+/// assert_eq!(a*m + b*n, d);
+/// assert_eq!(m % d, 0);
+/// assert_eq!(n % d, 0);
+/// for k in (1 + d)..min(m, n) {
+///     assert!(m % k != 0 || n % k != 0);
+/// }
 /// ```
 pub fn gcd_factors(m: i64, n: i64) -> (i64, i64, i64) {
-    panic!("Not implemented yet");
+    debug_assert!(m > 0 && n > 0, "Arguments must be positive");
+    let (mut c, mut d) = (m, n);
+    let (mut x, mut y) = (1, 0);
+    let (mut a, mut b) = (0, 1);
+    let (mut q, mut r, mut t);
+    loop {
+        q = c / d; // Note, these two divisons are optimized to be
+        r = c % d; // one instruction in assembly
+        if r == 0 { return (d, a, b); }
+        c = d;
+        d = r;
+        t = a;
+        a = x - q*a;
+        x = t;
+        t = b;
+        b = y - q*b;
+        y = t;
+    }
 }
 
 
