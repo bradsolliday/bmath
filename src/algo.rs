@@ -35,24 +35,43 @@ pub fn gcd(mut m: u64, mut n: u64) -> u64 {
 ///     assert!(m % k != 0 || n % k != 0);
 /// }
 /// ```
-pub fn gcd_factors(m: i64, n: i64) -> (i64, i64, i64) {
+pub fn gcd_factors(mut m: i64, mut n: i64) -> (i64, i64, i64) {
     debug_assert!(m > 0 && n > 0, "Arguments must be positive");
-    let (mut c, mut d) = (m, n);
+    // Invariant M: m = x*m_original + y*n_original
+    // Invariant N: n = a*m_original + b*n_original
     let (mut x, mut y) = (1, 0);
     let (mut a, mut b) = (0, 1);
-    let (mut q, mut r, mut t);
+    // M and N made true
+    let mut q;
+    if n > m {
+        q = n / m; // Note, these two divisons are optimized to be
+        n = n % m; // one instruction in assembly
+        // M true
+        // n == 0 => gcd = m
+        if n == 0 { return (m, x, y); }
+        a = a - q*x;
+        b = b - q*y;
+        // M still true, N made true
+    }
     loop {
-        q = c / d; // Note, these two divisons are optimized to be
-        r = c % d; // one instruction in assembly
-        if r == 0 { return (d, a, b); }
-        c = d;
-        d = r;
-        t = a;
-        a = x - q*a;
-        x = t;
-        t = b;
-        b = y - q*b;
-        y = t;
+        // M and N true
+        q = m / n;
+        m = m % n; 
+        // N true
+        // m == 0 => gcd = n
+        if m == 0 { return (n, a, b); }
+        x = x - q*a;
+        y = y - q*b;
+        // N still true, M made true
+        
+        q = n / m;
+        n = n % m;
+        // M true
+        // n == 0 => gcd = m
+        if n == 0 { return (m, x, y); }
+        a = a - q*x;
+        b = b - q*y;
+        // M still true, N made true
     }
 }
 
