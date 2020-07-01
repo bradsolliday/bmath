@@ -37,6 +37,10 @@ pub fn gcd(mut m: u64, mut n: u64) -> u64 {
 /// ```
 pub fn gcd_factors(mut m: i64, mut n: i64) -> (i64, i64, i64) {
     debug_assert!(m > 0 && n > 0, "Arguments must be positive");
+    // Invaraint D: (always true)
+    //      n == 0  => m = gcd(m_original, n_original)
+    //      m == 0  => n = gcd(m_original, n_original)
+    //      m,n !=0 => gcd(m, n) = gcd(m_original, n_original)
     // Invariant M: m = x*m_original + y*n_original
     // Invariant N: n = a*m_original + b*n_original
     let (mut x, mut y) = (1, 0);
@@ -47,7 +51,6 @@ pub fn gcd_factors(mut m: i64, mut n: i64) -> (i64, i64, i64) {
         q = n / m; // Note, these two divisons are optimized to be
         n = n % m; // one instruction in assembly
         // M true
-        // n == 0 => gcd = m
         if n == 0 { return (m, x, y); }
         a = a - q*x;
         b = b - q*y;
@@ -58,7 +61,6 @@ pub fn gcd_factors(mut m: i64, mut n: i64) -> (i64, i64, i64) {
         q = m / n;
         m = m % n; 
         // N true
-        // m == 0 => gcd = n
         if m == 0 { return (n, a, b); }
         x = x - q*a;
         y = y - q*b;
@@ -67,7 +69,6 @@ pub fn gcd_factors(mut m: i64, mut n: i64) -> (i64, i64, i64) {
         q = n / m;
         n = n % m;
         // M true
-        // n == 0 => gcd = m
         if n == 0 { return (m, x, y); }
         a = a - q*x;
         b = b - q*y;
