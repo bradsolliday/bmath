@@ -1,7 +1,7 @@
 
 /// Returns the greatest common divisors of n and m
 ///     using euclid's algorithm.
-/// Precondition: n and m are non-zero
+/// Precondition: n and m are positive.
 pub fn gcd(mut m: u64, mut n: u64) -> u64 {
     debug_assert!(m > 0 && n > 0, "Arguments must be positive");
     if n > m {
@@ -16,7 +16,18 @@ pub fn gcd(mut m: u64, mut n: u64) -> u64 {
     }
 }
 
-pub fn gcd_factors(m: u64, n: u64) -> (u64, u64, u64) {
+/// Returns (d, a, b) where d is the gcd of n and m, and
+/// a and b such that a*m + b*n = d.
+/// Precondition: m and n are positive. 
+///
+/// # Example
+///
+/// ```
+/// use bmath::algo::gcd_factors;
+/// let result = gcd_factors(25, 15);
+/// assert_eq!(result, (5, 2, -3));
+/// ```
+pub fn gcd_factors(m: i64, n: i64) -> (i64, i64, i64) {
     panic!("Not implemented yet");
 }
 
@@ -52,7 +63,7 @@ mod tests {
             for n in 1..200 {
                 let (d, a, b) = gcd_factors(m, n);
                 assert_eq!(a*m + b*n, d);
-                is_gcd(d, m, n);
+                is_gcd(d as u64, m as u64, n as u64);
             }
         }
     }

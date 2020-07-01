@@ -1,5 +1,5 @@
 [package]
-name = "algorithms"
+name = "bmath"
 version = "0.1.0"
 authors = ["Bradley-Solliday"]
 edition = "2018"
