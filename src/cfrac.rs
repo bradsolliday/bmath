@@ -1,6 +1,8 @@
 
 use num_traits::PrimInt;
+use num::rational::Ratio;
 use std::fmt;
+use std::ops::Mul;
 
 #[derive(Debug)]
 pub struct CFrac<I: PrimInt> {
@@ -28,6 +30,22 @@ impl <I: PrimInt> CFrac<I> {
     }
 
 }
+
+impl <I: num::Integer + PrimInt> From<&CFrac<I>> for Ratio<I> {
+    fn from(cf: &CFrac<I>) -> Self {
+        let mut vals = cf.values.iter().rev();
+        let mut num = *vals.next().unwrap(); // Cannot fail
+        let mut den = I::one();
+        for a in vals {
+            let temp = num;
+            num = *a * num + den;
+            den = temp;
+        }
+        Ratio::new(num, den)
+    }
+}
+            
+
 
 impl <I: PrimInt + fmt::Display> fmt::Display for CFrac<I> {
 
