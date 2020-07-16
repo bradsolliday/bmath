@@ -1,4 +1,5 @@
 pub mod algo;
+pub mod primes;
 
 #[cfg(test)]
 mod tests {
