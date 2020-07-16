@@ -1,20 +1,23 @@
 
 //! A couple functions for calculating gcd's
 
+use num_traits::PrimInt;
+
 /// Returns the greatest common divisors of n and m
 ///     using euclid's algorithm.
 /// Precondition: n and m are positive.
-pub fn gcd(mut m: u64, mut n: u64) -> u64 {
-    debug_assert!(m > 0 && n > 0, "Arguments must be positive");
+pub fn gcd<I: PrimInt>(mut m: I, mut n: I) -> I {
+    let zero = I::zero();
+    debug_assert!(m > zero && n > zero, "Arguments must be positive");
     if n > m {
         n = n % m;
-        if n == 0 { return m; }
+        if n == zero { return m; }
     }
     loop {
         m = m % n;
-        if m == 0 { return n; }
+        if m == zero { return n; }
         n = n % m;
-        if n == 0 { return m; }
+        if n == zero { return m; }
     }
 }
 

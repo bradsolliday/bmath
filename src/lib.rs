@@ -1,6 +1,10 @@
-pub mod algo;
+
+extern crate num_traits;
+
 mod primes;
 
+pub mod algo;
+pub mod cfrac;
 pub use primes::PCache;
 
 #[cfg(test)]
