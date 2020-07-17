@@ -1,5 +1,7 @@
 pub mod algo;
-pub mod primes;
+mod primes;
+
+pub use primes::PCache;
 
 #[cfg(test)]
 mod tests {

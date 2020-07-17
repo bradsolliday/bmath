@@ -2,24 +2,62 @@
 #[derive(Clone, PartialEq)]
 enum  Num { Prime, Composite }
 
-const BUFCAP: usize = 10_000_000;
+const BUFCAP: usize = 1_000_000;
 
-pub struct PList {
-    pub primes: Vec<(usize, usize)>, // (prime, offset)
+/// An object for calculating and caching consecutive prime numbers
+///
+/// # Examples
+///
+/// ```
+/// //examples go here
+/// ```
+pub struct PCache {
+    primes: Vec<(usize, usize)>, // (prime, offset)
     buffer: Vec<Num>,
     max_checked: usize
 }
 
-impl PList {
+impl PCache {
 
-    pub fn new(initial_cap: usize) -> PList {
-        PList {
-            primes: Vec::with_capacity(initial_cap),
+    /// Returns a new empty PCache.
+    /// No primes will be calculated until a prime is requested from it.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use bmath::PCache;
+    ///
+    /// let mut cache: PCache = PCache::new();
+    /// ```
+    pub fn new() -> PCache {
+        // Consider passing in arguments to initialize primes with
+        // capaciity and to allow the user to set the BUFCAP.
+        PCache {
+
+            primes: Vec::new(),
             buffer: vec![Num::Prime; BUFCAP],
-            max_checked: 1
+            max_checked: 1 // 2 is the first unchecked value
         }
     }
 
+    /// Returns the nth prime number. First checks if nth prime has been
+    /// cached and only calculates new primes if it hasn't. Caches all
+    /// newly computed primes.
+    ///
+    /// Precondition: n > 0
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use bmath::PCache;
+    ///
+    /// let mut primes = PCache::new();
+    ///
+    /// assert_eq!(2,  primes.nth_prime(1));
+    /// assert_eq!(3,  primes.nth_prime(2));
+    /// assert_eq!(5,  primes.nth_prime(3));
+    /// assert_eq!(11, primes.nth_prime(5));
+    /// ```
     pub fn nth_prime(&mut self, n: usize) -> usize {
         assert!( n > 0, "0th prime not well defined");
         while n > self.primes.len() {
@@ -33,6 +71,28 @@ impl PList {
         self.primes[n - 1].0
     }
 
+    /// Returns a new Vec<usize> of all primes cached so far. The outputs
+    /// nth element (index 0 is the first element) is the nth prime
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use bmath::PCache;
+    ///
+    /// let mut primes = PCache::new();
+    /// let cached_vals = primes.cached_primes();
+    ///
+    /// assert_eq!(cached_vals.len(), 0);
+    ///
+    /// let p50 = primes.nth_prime(50);
+    /// let cached_vals = primes.cached_primes();
+    ///
+    /// assert!(cached_vals.len() >= 50);
+    ///
+    /// assert_eq!(cached_vals[49], p50);
+    /// assert_eq!(cached_vals[0], 2);
+    /// assert_eq!(cached_vals[4], 11);
+    /// ```
     pub fn cached_primes(&self) -> Vec<usize> {
         self.primes.iter().map(|(p,_)| *p).collect()
     }
@@ -69,18 +129,4 @@ impl PList {
         self.max_checked += length;
     }
 
-}
-        
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    //#[test]
-    //fn prime_test() {
-    //    let n = 10000000;
-    //    let mut plist = PList::new(n);
-    //    println!("{}th prime: {}", n, plist.nth_prime(n));
-    //    println!("Calculated {} primes", plist.primes.len());
-    //    //println!("Cached primes: {:?}", plist.cached_primes());
-    //}
 }
