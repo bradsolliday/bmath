@@ -1,16 +1,46 @@
 
+//! Module for calculating continued fractions
+
 use num_traits::PrimInt;
 use num::rational::Ratio;
 use std::fmt;
-use std::ops::Mul;
 
+/// A sequence of integers where all but the first element must be positive.
+///
+/// If representing a rational number, the sequence is finite and terminates
+/// in a value greater than 1. If representing a irrational number, the
+/// sequence is infinite.
+///
+/// Every real number is uniquely identified by a continued fraction.
 #[derive(Debug)]
 pub struct CFrac<I: PrimInt> {
     values: Vec<I>
 }
 
+// I should make it iterable. If for some reason I wanted to do that. Would be
+// easy considering my implementation.
 impl <I: PrimInt> CFrac<I> {
 
+    /// Returns the continued fraction (CFrac) of the rational number
+    /// p / q
+    ///
+    /// # Examples
+    /// ```
+    /// use bmath::cfrac::CFrac;
+    /// use num::rational::Ratio;
+    ///
+    /// let (p, q) = (-4, 5);
+    /// 
+    /// let cf = CFrac::<i64>::new(p, q);
+    ///
+    /// assert_eq!(Ratio::from(&cf), Ratio::new(p,q));
+    ///
+    /// let (p, q) = (47, 51);
+    ///
+    /// let cf = CFrac::<usize>::new(p, q);
+    ///
+    /// assert_eq!(Ratio::from(&cf), Ratio::new(p,q));
+    /// ```
     pub fn new(mut p: I, mut q: I) -> CFrac<I> {
         let zero = I::zero();
         assert!(q > zero, "Denominator in CFrac must be positive");
@@ -32,6 +62,7 @@ impl <I: PrimInt> CFrac<I> {
 }
 
 impl <I: num::Integer + PrimInt> From<&CFrac<I>> for Ratio<I> {
+
     fn from(cf: &CFrac<I>) -> Self {
         let mut vals = cf.values.iter().rev();
         let mut num = *vals.next().unwrap(); // Cannot fail
