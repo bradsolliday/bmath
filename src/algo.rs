@@ -1,4 +1,6 @@
 
+//! A couple functions for calculating gcd's
+
 /// Returns the greatest common divisors of n and m
 ///     using euclid's algorithm.
 /// Precondition: n and m are positive.

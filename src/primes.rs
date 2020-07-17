@@ -15,7 +15,7 @@ const BUFCAP: usize = 1_000_000;
 /// Works by maintaining two sets of data. First, a buffer which acts a bit like
 /// the number table typically used when discussing the Sieve of Eratosthenes.
 /// Roughly, the number n is represented by the nth element of the buffer,
-/// and buffer[n] is a marker indicating whether or not n has been shown to be
+/// and buffer\[n\] is a marker indicating whether or not n has been shown to be
 /// a composite number.
 ///
 /// The second is a list of prime numbers, each paired with their smallest
