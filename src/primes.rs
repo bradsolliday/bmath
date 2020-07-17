@@ -6,15 +6,34 @@ const BUFCAP: usize = 1_000_000;
 
 /// An object for calculating and caching consecutive prime numbers
 ///
+/// # Method of Calculation
+///
+/// Based on the Sieve of Eratosthenes, except modified to allow calculation
+/// of arbitrarily large prime numbers (only space to store the generated list
+/// of primes is needed).
+///
+/// Works by m
+///
 /// # Examples
 ///
 /// ```
 /// //examples go here
 /// ```
 pub struct PCache {
+    // Invariants:
+    // 1) primes[n-1].1 + max_checked + 1 is the smallest multiple of
+    // primes[n-1].0 greater than max_checked.
+    // 2) primes[n-1].0 is the nth prime number (2 is the first prime number).
+    // 3) If num > 1 and num <= max_checked, then num has been been proven to
+    // either be composite or prime.
+    //
+    // buffer[primes[n-1].1] represents this first multiple of primes[n-1].0
+    // that is greater than max_checked. buffer "buffers" the steam of natural
+    // numbers.
+
     primes: Vec<(usize, usize)>, // (prime, offset)
+    max_checked: usize,
     buffer: Vec<Num>,
-    max_checked: usize
 }
 
 impl PCache {
@@ -30,8 +49,14 @@ impl PCache {
     /// let mut cache: PCache = PCache::new();
     /// ```
     pub fn new() -> PCache {
-        // Consider passing in arguments to initialize primes with
-        // capaciity and to allow the user to set the BUFCAP.
+        // buffer is initialized to Num::Prime as numbers are prime if
+        // they haven
+
+        // Consider allowing the user to pass in arguments to set the size
+        // of the buffer (perhaps reset it too). Big affect on performance
+        // and the user should have control.
+        // Initializing primes with capcity doesn't seem to have a noticeable
+        // affect
         PCache {
 
             primes: Vec::new(),
@@ -97,6 +122,7 @@ impl PCache {
         self.primes.iter().map(|(p,_)| *p).collect()
     }
 
+    // 
     fn check_next(&mut self, length: usize) {
 
         // max_checked + 1 is the smallest next prime we might find. If
@@ -120,8 +146,9 @@ impl PCache {
         for offset in 0..length {
             if self.buffer[offset] == Num::Prime {
                 let new_prime = self.max_checked + 1 + offset;
-                // new_prime >= max_checked + 1 >= length
-                self.primes.push((new_prime, offset + new_prime - length));
+                let new_offset =
+                    offset + new_prime * new_prime - new_prime - length;
+                self.primes.push((new_prime, new_offset));
             } else {
                 self.buffer[offset] = Num::Prime;
             }
@@ -129,4 +156,19 @@ impl PCache {
         self.max_checked += length;
     }
 
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::PCache;
+
+    #[allow(dead_code)]
+    //#[test]
+    fn test_performance() {
+        let mut p = PCache::new();
+        let n = 10_000_000;
+        let big_prime = p.nth_prime(n);
+        println!("The {}th prime is {}", n, big_prime);
+    }
 }
