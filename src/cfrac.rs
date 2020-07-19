@@ -1,6 +1,4 @@
 
-//! Module for calculating continued fractions
-
 use num_traits::PrimInt;
 use num::rational::Ratio;
 use std::fmt;
@@ -34,7 +32,7 @@ impl <I: num::Integer + PrimInt> CFrac<I> {
     ///
     /// # Examples
     /// ```
-    /// use bmath::cfrac::CFrac;
+    /// use bmath::CFrac;
     /// use num::rational::Ratio;
     ///
     /// let (p, q) = (-4, 5);
@@ -72,7 +70,7 @@ impl <I: num::Integer + PrimInt> CFrac<I> {
     /// # Examples
     ///
     /// ```
-    /// use bmath::cfrac::CFrac;
+    /// use bmath::CFrac;
     /// use num::rational::Ratio;
     ///
     /// let [p, q]: [usize; 2] = [17, 18];
@@ -95,15 +93,15 @@ impl <I: num::Integer + PrimInt> CFrac<I> {
     ///
     /// If cf = [a0; a1, a2, ..., an], then
     ///
-    /// cf.convergents[0] = [a0],
-    /// cf.convergents[1] = [a0; a1],
-    /// cf.convergents[4] = [a0; a1, a2, a3, a4],
+    /// cf.convergents\[0\] = \[a0\],
+    /// cf.convergents\[1\] = \[a0; a1\],
+    /// cf.convergents\[4\] = \[a0; a1, a2, a3, a4\],
     /// and so on.
     ///
     /// # Examples
     /// 
     /// ```
-    /// use bmath::cfrac::CFrac;
+    /// use bmath::CFrac;
     /// use num::rational::Ratio;
     ///
     /// // 317_811 is the 27th fibonacci number
