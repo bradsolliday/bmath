@@ -25,7 +25,6 @@ export class Hello extends React.Component {
             message = <h1>You have clicked the button an 
             odd number of times!</h1>;
         }
-        console.log(this.state.clicked);
         return (
             <React.Fragment>
               <input type="button" onClick={this.handleClick} />
