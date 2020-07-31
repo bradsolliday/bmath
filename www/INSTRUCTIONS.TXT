@@ -5,6 +5,23 @@ Commands will be surrounded by brackets
 
 THESE COMMANDS ASSUME YOU'RE IN THE WWW DIRECTIORY UNLESS STATED OTHERWISE
 
+1) run [./update_docs.sh]
+2) run [npm run build]
+3) run [mv dist ../..]
+4) run [git checkout gh-pages]
+5) run [rm -rf *]
+6) run [mv ../dist/* .]
+7) run [git add .]
+8) run [git commit]
+9) run [git push]
+
+And then you're done, to return to master run
+[git checkout master]
+
+
+THE BELOW IS DEPRECATED
+(I keep it only for the subtree stuff)
+
 -> First, enter [ npm run build ]
 This builds the distribution in the dist folder. This is what gh-pages
 needs to actually serve the website.
