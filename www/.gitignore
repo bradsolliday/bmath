@@ -3,3 +3,4 @@ node_modules
 /dist
 /pkg
 /wasm-pack.log
+/static/doc
