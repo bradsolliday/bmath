@@ -22,7 +22,6 @@ module.exports = {
               test: /\.(js|jsx)$/,
               exclude: [
                   /node_modules/,
-                  path.resolve(__dirname, "static/doc")
               ],
               use: {
                   loader: "babel-loader"
