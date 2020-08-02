@@ -80,8 +80,6 @@ export class PrimeCalculator extends React.Component {
 
         }
 
-        console.log(this.state);
-
         return (
             <React.Fragment>
                 <label htmlFor="auto">Auto Calculate</label>
