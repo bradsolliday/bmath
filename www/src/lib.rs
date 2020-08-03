@@ -26,10 +26,10 @@ extern "C" {
 #[wasm_bindgen]
 impl PCache {
 
-    pub fn new() -> PCache {
+    pub fn new(bufcap: usize) -> PCache {
         console_error_panic_hook::set_once();
         PCache {
-            cache: PCacheImpl::new()
+            cache: PCacheImpl::new(bufcap)
         }
     }
 
@@ -44,7 +44,7 @@ mod tests {
 
     #[test]
     fn test_nth_primes() {
-        let mut cache = PCache::new();
+        let mut cache = PCache::new(100_000);
         assert_eq!(cache.nth_prime(7400), 75079);
     }
 }

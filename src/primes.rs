@@ -2,8 +2,6 @@
 #[derive(Clone, PartialEq)]
 enum  Num { Prime, Composite }
 
-const BUFCAP: usize = 1_000_000;
-
 /// An object for calculating and caching consecutive prime numbers
 ///
 /// # Method of Calculation
@@ -67,7 +65,7 @@ const BUFCAP: usize = 1_000_000;
 /// ```
 /// use bmath::PCache;
 ///
-/// let mut pc: PCache = PCache::new();
+/// let mut pc: PCache = PCache::new(1000);
 ///
 /// let cache: Vec<usize> = pc.cached_primes();
 ///
@@ -111,7 +109,13 @@ pub struct PCache {
 
 impl PCache {
 
-    /// Returns a new empty PCache.
+    /// Returns a new empty PCache with buffer capacity of bufcap.
+    /// 
+    /// The larger bufcap the faster a prime will be executed (up until
+    /// bufcap get's close to the value of the largest prime calculated)
+    /// However, an array of length bufcap will be allocated, so memory
+    /// usaged will go up.
+    /// 
     /// No primes will be calculated until a prime is requested from it.
     ///
     /// # Examples
@@ -119,9 +123,9 @@ impl PCache {
     /// ```
     /// use bmath::PCache;
     ///
-    /// let mut cache: PCache = PCache::new();
+    /// let mut cache: PCache = PCache::new(1_000_000);
     /// ```
-    pub fn new() -> PCache {
+    pub fn new(bufcap: usize) -> PCache {
         // buffer is initialized to Num::Prime as numbers are prime if
         // they haven't been found to be composite.
 
@@ -133,7 +137,7 @@ impl PCache {
         PCache {
 
             primes: Vec::new(),
-            buffer: vec![Num::Prime; BUFCAP],
+            buffer: vec![Num::Prime; bufcap],
             max_checked: 1 // 2 is the first unchecked value
         }
     }
@@ -149,7 +153,7 @@ impl PCache {
     /// ```
     /// use bmath::PCache;
     ///
-    /// let mut primes = PCache::new();
+    /// let mut primes = PCache::new(1_000);
     ///
     /// assert_eq!(2,  primes.nth_prime(1));
     /// assert_eq!(3,  primes.nth_prime(2));
@@ -160,10 +164,10 @@ impl PCache {
         assert!( n > 0, "0th prime not well defined");
         while n > self.primes.len() {
             self.check_next(
-                if self.max_checked < BUFCAP {
+                if self.max_checked < self.buffer.len() {
                     self.max_checked + 1
                 } else {
-                    BUFCAP
+                    self.buffer.len()
                 });
         }
         self.primes[n - 1].0
@@ -177,7 +181,7 @@ impl PCache {
     /// ```
     /// use bmath::PCache;
     ///
-    /// let mut primes = PCache::new();
+    /// let mut primes = PCache::new(1_000);
     /// let cached_vals = primes.cached_primes();
     ///
     /// assert_eq!(cached_vals.len(), 0);
@@ -245,7 +249,7 @@ mod tests {
 
     #[test]
     fn test_nth_prime() {
-        let mut pc = PCache::new();
+        let mut pc = PCache::new(1000);
         assert_eq!(pc.nth_prime(2) , PRIMES[1]);
         assert_eq!(pc.nth_prime(15), PRIMES[14]);
         assert_eq!(pc.nth_prime(30), PRIMES[29]);
@@ -256,7 +260,7 @@ mod tests {
 
     #[test]
     fn test_cached_primes() {
-        let mut pc = PCache::new();
+        let mut pc = PCache::new(1000);
         pc.nth_prime(1000);
         let cache = pc.cached_primes();
         for (n, &p) in cache.iter().enumerate() {
