@@ -25,7 +25,8 @@ export class PrimeCalculator extends React.Component {
             n: 1, // n as in nth prime
             cache: props.cache_initializer(), //PCache.new(1000000),
             nth_prime: 2,
-            auto_calculate: true
+            auto_calculate: true,
+            dtime: 0
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -41,9 +42,8 @@ export class PrimeCalculator extends React.Component {
         if (this.state.auto_calculate) {
             this.setState({
                 input_n: new_n,
-                n: new_n,
-                nth_prime: this.state.cache.nth_prime(new_n)
             });
+            this.calculate();
         } else {
             this.setState({
                 input_n: new_n
@@ -53,9 +53,13 @@ export class PrimeCalculator extends React.Component {
 
 
     calculate() {
+        let start = Date.now();
+        let prime = this.state.cache.nth_prime(this.state.input_n);
+        let delta = Date.now() - start;
         this.setState({
             n: this.state.input_n,
-            nth_prime: this.state.cache.nth_prime(Number(this.state.input_n))
+            nth_prime: prime,
+            dtime: delta
         });
     }
 
@@ -95,6 +99,7 @@ export class PrimeCalculator extends React.Component {
                        onChange={this.handleChange} />
                 {calculate_button}
                 <p>The {nth} prime is {this.state.nth_prime}.</p>
+                <p>(Time to calculate: {this.state.dtime} miliseconds)</p>
             </React.Fragment>
         );
     }

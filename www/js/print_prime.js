@@ -9,9 +9,13 @@ ReactDOM.render(<p>Starting calculation of prime 300</p>, document.getElementByI
 
 
 ReactDOM.render(
-    <Expandable>
-      <PrimeCalculator cache_initializer={() => PCache.new(1000000)}/>
-      <p>Naive implementation:</p>
-      <PrimeCalculator cache_initializer={NaivePCache.new}/>
-    </Expandable>,
+    <React.Fragment>
+        <p>Reset cached primes by minimizing and reexpanding.</p>
+        <Expandable>
+          <br/>
+          <PrimeCalculator cache_initializer={() => PCache.new(1000000)}/>
+          <p>Naive implementation:</p>
+          <PrimeCalculator cache_initializer={NaivePCache.new}/>
+        </Expandable>
+    </React.Fragment>,
     document.getElementById("primes"));
