@@ -7,14 +7,18 @@ import {PCache, NaivePCache} from "../pkg/index_bg.js";
 
 ReactDOM.render(<p>Starting calculation of prime 300</p>, document.getElementById("primes"));
 
+const PCacheIntro = "Here you can demo the prime number calculator detailed in the documentation for bmath. It's written in Rust and compiled to Web Assembly";
+
+const NaiveWasmIntro = "This below also calculates prime numbers, but it uses the naive method of mainaining a list of prime numbers checking each number to see if it's prime by seeing if any of our existing prime numbers divide it. This is a point of comparison to demonstrate the speed gains we get above. This implementation also caches previously calculated primes.";
 
 ReactDOM.render(
     <React.Fragment>
         <p>Reset cached primes by minimizing and reexpanding.</p>
         <Expandable>
           <br/>
+          <p>{PCacheIntro}</p>
           <PrimeCalculator cache_initializer={() => PCache.new(1000000)}/>
-          <p>Naive implementation:</p>
+          <p>{NaiveWasmIntro}</p>
           <PrimeCalculator cache_initializer={NaivePCache.new}/>
         </Expandable>
     </React.Fragment>,
