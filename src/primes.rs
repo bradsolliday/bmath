@@ -225,7 +225,7 @@ impl PCache {
             if self.buffer[offset] == Num::Prime {
                 let new_prime = self.max_checked + 1 + offset;
                 let new_offset = match new_prime.checked_mul(new_prime) {
-                    Some(p2) => offset + p2 - new_prime - length,
+                    Some(p2) => p2 - self.max_checked - length - 1,
                     None     => usize::MAX
                 };
                 //let new_offset =

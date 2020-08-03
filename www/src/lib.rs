@@ -38,6 +38,45 @@ impl PCache {
     }
 }
 
+#[wasm_bindgen]
+pub struct NaivePCache {
+    primes: Vec<usize>,
+    max_checked: usize
+}
+
+#[wasm_bindgen]
+impl NaivePCache {
+
+    pub fn new() -> NaivePCache {
+        NaivePCache {
+            primes: Vec::new(),
+            max_checked: 1
+        }
+    }
+
+    pub fn nth_prime(&mut self, n: usize) -> usize {
+        assert!(n > 0, "The 0th prime is not well defined");
+        let mut smallest_unchecked = self.max_checked + 1;
+        let mut found_divisor = false;
+        while self.primes.len() < n {
+            for p in &self.primes {
+                if smallest_unchecked % p == 0 {
+                    found_divisor = true;
+                    break;
+                }
+            }
+            if !found_divisor {
+                self.primes.push(smallest_unchecked);
+                self.max_checked = smallest_unchecked;
+            }
+            found_divisor = false;
+            smallest_unchecked += 1;
+        }
+        self.primes[n - 1]
+    }
+
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -46,5 +85,8 @@ mod tests {
     fn test_nth_primes() {
         let mut cache = PCache::new(100_000);
         assert_eq!(cache.nth_prime(7400), 75079);
+
+        let mut naive_cache = NaivePCache::new();
+        assert_eq!(naive_cache.nth_prime(300), 1987);
     }
 }
