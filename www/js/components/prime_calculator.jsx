@@ -24,7 +24,7 @@ export class PrimeCalculator extends React.Component {
         this.state = {
             input_n: 1,
             n: 1, // n as in nth prime
-            cache: PCache.new(10000),
+            cache: PCache.new(1000),
             nth_prime: 2,
             auto_calculate: true
         }
@@ -46,8 +46,8 @@ export class PrimeCalculator extends React.Component {
         if (new_n <= 0) {
             new_n = 1;
         }
-        if (new_n > 6350) {
-            new_n = 6350;
+        if (new_n > 6300) {
+            new_n = 6300;
         }
         if (this.state.auto_calculate) {
             this.setState({
