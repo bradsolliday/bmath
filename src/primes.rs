@@ -224,8 +224,12 @@ impl PCache {
         for offset in 0..length {
             if self.buffer[offset] == Num::Prime {
                 let new_prime = self.max_checked + 1 + offset;
-                let new_offset =
-                    offset + new_prime * new_prime - new_prime - length;
+                let new_offset = match new_prime.checked_mul(new_prime) {
+                    Some(p2) => offset + p2 - new_prime - length,
+                    None     => usize::MAX
+                };
+                //let new_offset =
+                //    offset + new_prime * new_prime - new_prime - length;
                 self.primes.push((new_prime, new_offset));
             } else {
                 self.buffer[offset] = Num::Prime;
