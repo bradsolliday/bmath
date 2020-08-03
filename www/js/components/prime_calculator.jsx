@@ -35,9 +35,19 @@ export class PrimeCalculator extends React.Component {
     }
 
     handleChange(event) {
+        /* new_n must be between 1 and 6350 because the nth prime number
+         * where n is non-positive is not well defined, and because the first
+         * multiple of a prime number p that's not a multiple of a prime number
+         * less than p is p^2, sqrt(u32::MAX + 1) = 65536 which is about equal
+         * to the 6500th prime number, meaning we'll have integer overflow when
+         * n gets too close to 6500
+         * */
         let new_n = Number(event.target.value);
         if (new_n <= 0) {
             new_n = 1;
+        }
+        if (new_n > 6350) {
+            new_n = 6350;
         }
         if (this.state.auto_calculate) {
             this.setState({
