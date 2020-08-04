@@ -11,6 +11,8 @@ const PCacheIntro = "Here you can demo the prime number calculator detailed in t
 
 const NaiveWasmIntro = "This below also calculates prime numbers, but it uses the naive method of mainaining a list of prime numbers checking each number to see if it's prime by seeing if any of our existing prime numbers divide it. This is a point of comparison to demonstrate the speed gains we get above. This implementation also caches previously calculated primes.";
 
+const NaiveJsIntro = "This below is the same as the above, using even the same naive algorithm, yet is written in pure Javascript. You'll notice it is faster than the Web Assembly version, but I'm not yet sure why this is.";
+
 class NaiveJSPCache {
 
     constructor() {
@@ -49,7 +51,7 @@ ReactDOM.render(
           <PrimeCalculator cache_initializer={() => PCache.new(1000000)}/>
           <p>{NaiveWasmIntro}</p>
           <PrimeCalculator cache_initializer={NaivePCache.new}/>
-          <p>Naive js PCache</p>
+          <p>{NaiveJsIntro}</p>
           <PrimeCalculator cache_initializer={() => new NaiveJSPCache}/>
         </Expandable>
     </React.Fragment>,
