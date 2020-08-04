@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Just a Bit Silly - gcd</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet" type="text/css">
+    <link href="stylesheets/site_style.css" rel="stylesheet" type="text/css">
+    <link href="stylesheets/gcd_style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="javascripts/LaTeXMathML.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <h1><a href="home_page.html">Just a Bit Silly</a></h1>
+      <h2>A Programming Blog by Bradley Solliday</h2>
+
+      <nav>
+        <a href="#">LinkedIn</a> |
+        <a href="#">Resume</a>
+      </nav>
+    </header>
+
+    <main>
+      <h1>Euclid's Algorithm for Calculating the GCD</h1>
+
+      <section class="introduction">
+        <h2>Why I'm Interested</h2>
+        <p>It's sometimes tempting to dismiss such simple problems as calculating the greatest common divisor of two positive integers. But I think it can be interesting to consider just how these sorts of things can be done.</p>
+        <p>If you put me on the spot not too long ago, and asked me to divise a way to calculate the gcd of two positive integers, I'd have perhaps first considered brute forcing it, checking every value in the range 1 through the smaller of the two:</p>
+
+        <section class="code">
+          <pre>/**</pre>
+          <pre> * Calculates the greatest common divisor of arguments</pre>
+          <pre> * Returns: the gcd of n and m</pre>
+          <pre> * Preconditions: n and m are positive</pre>
+          <pre> **/</pre>
+          <pre>int gcd(int n, int m ) {</pre>
+          <pre>    int divisor = n < m ? n : m;</pre>
+          <pre>    while (0 != n % divisor || 0 != m % divisor) {</pre>
+          <pre>        divisor--;</pre>
+          <pre>    }</pre>
+          <pre>    return divisor;</pre>
+          <pre>}</pre>
+        </section>
+
+        <p>Now, while as unseemly as this was feels, computers are fast enough to make this work for most applications and it was so easy to write up that one might feel you should have a good reason to put more effort into it (such as needing the gcd of many large values).</p>
+        <p>In fact, you can try it here. Don't be afraid to use large inputs, as you're computer's in all likelyhood fast enough to handle it.</p>
+
+        <section class="demo-input" id="demo-brute-input">
+          <p>To see the algorithm at work, enter two positive integers you want to test</p>
+          <input type="number" class="input-1">
+          <input type="number" class="input-2">
+          <button id="calculate-gcd">Calculate gcd</button>
+          <button id="clear-output">Clear Output</button>
+        </section>
+
+        <section class="demo-output" id="demo-brute-output">
+        </section>
+
+      </section>
+
+      <section class="explanation">
+        <h2>A Better Way</h2>
+        <p>At this point, I would try to justify putting more effort with this by saying how it's all for fun and I don't need to be efficient with my time, but smart people have already looked at this problem before and we can just see how they've done it.</p>
+        <p>In fact, none other than Euclid of Alexandria (an ancient Greek mathematician who lived around 300 BC) wrote down a solution. Specifically, his solution is described in <a href="https://mathcs.clarku.edu/~djoyce/java/elements/bookVII/propVII1.html">proposition 1</a> and <a href="https://mathcs.clarku.edu/~djoyce/java/elements/bookVII/propVII2.html">proposition 2</a> of Book VII of <i>Euclid's Elements</i>.</p>
+        <p>The basic idea is that if q is how many times n goes into m and r is the remainder (so that m = qn + r), then (assuming r $\neq$ 0) gcd(m,n) = gcd(n,r).</p>
+        <p>This is simple to see. First denote d=gcd(m,n) and $\delta=gcd(n,r)$. Then, since d is the gcd of m and n, d|m and d|qn, and so d|(m - qn), but m - qn = r, so d|r, hence d is a common divisor of both n and r, and so is less than or equal the greatest common divisor $\delta$ (d $\leq$ $\delta$).</p>
+        <p>Conversely, $\delta$|n, so $\delta$|nq, and $\delta$|r, so $\delta$|(qn + r), i.e., $\delta|m$. Since d is the greatest common divisor of m and q, $\delta$ $\leq$ d.</p>
+        <p>But combined, these results imply d = $\delta$, as claimed.</p>
+        <p>The reason this helps us devise an algorithm is because the remainder is always less than n. So, if after replacing gcd(m,n) with gcd(n,r), we were to treat n as the new m and r as the new n, we'd be able to repeat the process over and over, with n decreasing by at least 1 every step.</p>
+        <p>It would only break down if the new r value were to ever equal 0, but if r = 0, then m = qn, and hence n is a common divisor of m and n. Moreover, since no divisor of n can be greater than n, it must be that $n$ is the greatest common divisor, and so we've found our gcd.</p>
+        <p>Now, not only have smart people come up with the idea before, smart people have written it up as a simple algorithm. Here's Donald Knuth's description in the first section of <i>The Art of Computer Programming</i>:</p>
+
+        <section class="algorithm">
+          <p><b>Euclid's algorithm:</b> Given two positive integers m and n, find their greatest common divisor, that is, the largest positive integer that evenly divides both m and n.</p>
+          <p><b>E1:</b> [Find Remainder] Divide m by n and let r be the remainder.</p>
+          <p><b>E2:</b> [Is it zero?] If r = 0, the algorithm terminates; n is the answer.</p>
+          <p><b>E2:</b> [Reduce] Set m $\leftarrow$ n, n $\leftarrow$ r, and go back to step E1.</p>
+      </section>
+
+      <p>Written up, this algorithm becomes</p>
+      
+      <section class="code">
+          <pre>/**</pre>
+          <pre> * Calculates the greatest common divisor of arguments</pre>
+          <pre> * Returns: the gcd of n and m</pre>
+          <pre> * Preconditions: n and m are positive</pre>
+          <pre> **/</pre>
+          <pre>int euclid(m, n) {</pre>
+          <pre>    int r = m % n;</pre>
+          <pre>    while (r != 0) {</pre>
+          <pre>        m = n;</pre>
+          <pre>        n = r;</pre>
+          <pre>        r = m % n;</pre>
+          <pre>    }</pre>
+          <pre>    return n;</pre>
+          <pre>}</pre>
+      </section>
+
+      <p>To hopefully aid in understanding the algorithm, enter any two positive integers (there are no artificially imposed size contraints here) and hit calculate. A table will be printed containing the values of n, m, and r after each r assignment. The initial values occupy the first rows, and the final values occupy the last rows.</p>
+      
+      <secton class="demo-input" id=demo1-input>
+        <input type="number" class="input-1">
+        <input type="number" class="input-2">
+        <button id="calculate-gcd">Calculate gcd</button>
+        <button id="clear-output">Clear Output</button>
+      </secton>
+
+      <section class="demo-output" id=demo1-output>
+      </section>
+
+      <p>Knuth points out that this code can actually be improved. First by using multiple return points, needless moves can be avoided. Specifically, once we obtain r by dividing m, m is no longer need, so we can instead place the value of r in m. Since the r value needs to become the new n value, we alternate the rolls of m and n.</p>
+      <p>Second, if n > m, r will equal m, and the first cycle of the loop will only do the job of swapping n and m. This is a needless division, and instead we can save time by explicity checking for it, treating n as m if it is in fact larger. With these adjustments implemented, we get:</p>
+
+      <section class="code">
+        <pre>/**</pre>
+        <pre> * Calculates the greatest common divisor of arguments</pre>
+        <pre> * Returns: the gcd of n and m</pre>
+        <pre> * Preconditions: n and m are positive</pre>
+        <pre> **/</pre>          
+        <pre>int improvedEuclid(m, n) {</pre>
+        <pre>    // The algorithm will still work even if this if statement is removed</pre>
+        <pre>    if (n > m) {</pre>
+        <pre>        n = n % m;</pre>
+        <pre>        if (n == 0) {return m;}</pre>
+        <pre>    }</pre>
+        <pre>    while (1) {</pre>
+        <pre>        m = m % n;</pre>
+        <pre>        if (m == 0) {return n;}</pre>
+        <pre>        n = n % m;</pre>
+        <pre>        if (n == 0) {return m;}</pre>
+        <pre>    }</pre>
+        <pre>}</pre>
+      </section>
+
+      <section class="demo-input" id="demo2-input">
+        <p>To see the algorithm at work, enter two positive integers you want to test</p>
+        <p>Mark checkbox to print steps<input type="checkbox" class="print-steps"> (print occurs after every assignment)</p>
+        <input type="number" class="input-1">
+        <input type="number" class="input-2">
+        <button id="calculate-gcd">Calculate gcd</button>
+        <button id="clear-output">Clear Output</button>
+      </section>
+
+      <section class="demo-output" id="demo2-output">
+      </section>
+    </main>
+
+    <footer>
+      <a href="home_page.html">Go Back to Home</a>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="javascripts/euclid_gcd.js"></script>
+  </body>
+</html>

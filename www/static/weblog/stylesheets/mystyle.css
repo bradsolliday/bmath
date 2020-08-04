@@ -1,0 +1,65 @@
+
+.introduction {
+	color: maroon;
+}
+
+.project-list {
+	background-color: snow;
+	margin-bottom: 20px;
+	border: 2px solid maroon;
+	border-radius: 10px;
+	overflow: auto;
+}
+
+.project-list * {
+	margin-bottom: 0;
+	margin-top: 0;
+	padding: 10px;
+}
+
+.project-list a {
+	float: left;
+	clear: left;
+	width: 250px;
+	border-right: 2px solid maroon;
+	margin-right: 10px;
+}
+
+.project-list p:nth-child(4n) {
+	background-color: lavenderblush;
+}
+
+footer {
+	padding: 10px;
+	color: black;
+	border-top: 2px solid maroon;
+	overflow: auto;
+}
+
+h2 {
+	text-align: center;
+}
+
+h3 {
+	clear: right;
+}
+
+div.contact {
+	margin-top: 20px;
+	border: 2px solid maroon;
+	border-radius: 10px;
+	padding: 10px;
+	background: white;
+	float: left;
+	width: 600px;
+}
+
+div.sitemap {
+	float: right;
+	width: 500px;
+}
+
+img {
+	float: right;
+	width: 400px;
+}

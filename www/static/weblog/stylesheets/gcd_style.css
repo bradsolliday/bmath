@@ -1,0 +1,79 @@
+
+.code {
+	font-family: "Lucida Console";
+	background: white;
+	padding: 10px;
+	display: inline-block;
+	border: 2px solid maroon;
+	border-radius: 10px;
+	margin-left:150px;
+
+}
+
+.code pre {
+	margin: 5px;
+	padding: 0px;
+	font-size: 1.2em;
+}
+
+h2 {
+	padding-left: 50px;
+	padding-right: 50px;
+}
+
+p {
+	margin-left: 100px;
+	margin-right: 100px;
+}
+
+.demo-input {
+	margin-left: 100px;
+}
+
+.demo-input p {
+	margin-left: 0px;
+}
+
+.demo-output {
+	margin-top: 30px;
+	margin-bottom: 25px;
+	margin-left: 50px;
+}
+
+.demo-output p {
+	color: maroon;
+	background: white;
+	border: 2px solid maroon;
+	border-radius: 5px;
+	display: inline-block;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;	
+	padding-bottom: 5px;
+}
+
+table {
+	font-family: "Lucida Console";
+	background: maroon;
+	border: 2px solid maroon;
+	border-radius: 4px;
+	text-align: right;
+	margin-left: 450px;
+}
+
+tr {
+	margin: 0px;
+	padding: 0px;
+}
+
+tr:nth-child(even) {
+	background: lavenderblush;
+}
+
+tr:nth-child(odd) {
+	background: white;
+}
+
+footer a {
+	padding: 20px;
+}

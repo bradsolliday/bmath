@@ -1,0 +1,86 @@
+<!doctype html>
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Just a Bit Silly - Triples</title>
+	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet" type="text/css">
+    <link href="stylesheets/site_style.css" rel="stylesheet" type="text/css">
+    <link href="stylesheets/pythagorean_triples_style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<header>
+      <h1><a href="home_page.html">Just a Bit Silly</a></h1>
+      <h2>A Programming Blog by Bradley Solliday</h2>
+
+      <nav>
+        <a href="#">LinkedIn</a> |
+        <a href="#">Resume</a>
+      </nav>
+    </header>
+
+    <main>
+    	<h1>Euclid's Formula for Generating Pythagorean Triples</h1>
+
+    	<section class="history">
+    		<h2 class="section-header">Ancient Fascination</h2>
+    		<p>Pythagorean triples, for one reason or another, have been captured the attention of people for thousands of years. The earliest known list of Pythagorean triples is on a cuneiform tablet known as Plimpton 322, believed to have been created in the ancient city of Larsa (southern Iraq) around 1800 BCE, not long before the Babylonian conquest of the region.</p>
+    		<img src="images/Plimpton_322.jpg" alt="" id="plimpton-322">
+    		<img src="images/larsa_map.png" id="larsa-map">
+    		<p>The purpose and context of the tablet is not certain, but Eleanor Robson argues in her <a href="Robson - Words and Pictures - New Light on Plimpton 322.pdf">2002 article</a> that it might have been used as part a teacher's problem list. (The article is also the source of the above map and all my information on the subject).</p>
+    		<p>What's particularly interesting to me is that some of the Pythagorean triples are quite large. The largest triple of the list, converted to our writing system, is 12,709 - 13,500 - 18,541. Clearly the author wasn't using some brute force method, especially considering all the calculations had to be done by hand.</p>
+    		<p>Robson's paper discusses some of the techniques the author might have used if you're interested, but I'm more concerned by the fact that someone living almost 4000 years might be capable of calculations I'm not. And so, how can we calculate the triples?</p>
+    	</section>
+
+    	<section class="euclid">
+    		<h2 class="section-header">Euclid's Formula</h2>
+    		<p>Well, not surprisingly, Euclid discussed this issue in <a href="https://mathcs.clarku.edu/~djoyce/java/elements/bookX/propX29.html">Lemma 1 of Proposition 29, Book 10</a> of his <i>Elements</i>. His solution is stunningly simple:</p>
+    		<p>Simply let \(n\) and \(m\) be natural numbers such that \(n > m\), then</p>
+    		$$n^2 - m^2,~2nm,~n^2 + m^2$$
+    		<p>is a pythagorean triple. It makes sense how one might arrive at this expression. Examining the squares \((a+b)^2=a^2+2ab+b^2\) and \((a-b)^2=a^2-2ab+b^2\), we see that we'd have two sides of a pythagorean triple if their difference, \(4ab\), were a square. Well, the easiest way to achive this is just to let both \(a\) and \(b\) be squares, yielding the above set of numbers.</p>
+    		<p>But this way of arriving at it doesn't seem to satisfying, to me at least. It seems to rely to much on luck in realizing that this works. But it turns out there's a pretty intuitive way of arriving at this if you're comfortable with complex numbers.</p>
+    	</section>
+
+    	<section class="complex-numbers">
+    		<h2 class="section-header">Multiplying Triangles</h2>
+    		<p>You might recall from math class that complex numbers can written two forms, the usual form of \(a+ib\), and a polar form of \(re^{i\theta}\), where \(r\) is the distance from \(0\) and \(\theta\) is the angle between the line connecting 0 to the number and the real axis. You can convert between the two by recalling and applying Euler's forumla: \(e^{i\theta}=\cos\theta+i\sin\theta\).</p>
+    		<p>Anyway, you can think of complex multiplication as a sort of rescaling plus a rotation, as:</p>
+    		$$re^{i\theta}\rho e^{i\phi}=r\rho e^{i(\theta+\phi)},$$
+    		<p>the resulting numbers distance from the origin is just the product of the two multiplied distances, and the angle with the real axis is the sum.</p>
+    		<p>If you're not too comfortable with representing complex numbers in polar form (perhaps you never took real analysis, or forgot how to prove that powers are summed when you multiply exponents) but are comfortable with linear algrebra, there's another way to convince yourself that multiplication is just scaling and rotation.</p>
+    		<p>Multiplication by a complex number \(a+ib\) is linear operation, meaning we can understand what it does to any number by asking what it does to a basis. In this case, our vector space is \(\mathbb{C}\), so a suitable basis would be \(\{1, i\}\). \((a+ib)1=a+ib\), 
+
+    		<div id="canvasLoc">
+    		</div>
+
+    		<section class="derive-formula">
+    		</section>
+    	</section>
+
+    	<section class="get-all">
+    		<h2 class="section-header">Gotta Catch 'Em All</h2>
+    	</section>
+
+    	<section class="avoid-duplicates">
+    		<h2 class="section-header">Avoiding Duplicates</h2>
+    	</section>
+
+    	<section class="final-demo">
+    		<h2 class="section-header">The Algorithm In Action</h2>
+    	</section>
+    </main>
+
+    <footer>
+      <a href="home_page.html">Go Back to Home</a>
+    </footer>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="javascripts/pythagorean_triples_script.js"></script>
+</body>
+
+</html>

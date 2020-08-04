@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!--This is how comments are written-->
+    <!--The title is what's written on the tab header-->
+    <title>Bradley Solliday's Web Log</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet" type="text/css">
+    <link href="stylesheets/mystyle.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <!--The <h1> tag seems to be header 1. <h2> and <h3>
+      are smaller font headers. So 1 if of primary importance and larger numbers are of more minor importance.-->
+    <header>
+      <h1>Bradley Solliday's Web Log</h1>
+
+      <nav>
+        <a href="#">LinkedIn</a> |
+        <a href="#">Resume</a> |
+        <a href="#">Support</a>
+      </nav>
+    </header>
+    <hr>
+    <!-- <p> is for paragraph-->
+    <main>
+      <h2>Euclid, Euclid, Euclid!</h2>
+        <p>Here you can see some of the projects I've been working on.</p>
+        <p>Three projects I'd like to highlight here are my pythagorean triple generator (the algorithm lists every pythagorean triple up to scaling and reflections), an efficient means of calculating gcd's, and an emulator for string algorithms, with a gcd algorithm as an example.</p>
+        <h3>Calculating the greatest common divisor</h3>
+          <p>How do you calculate the gcd of two integers? There are obviously ways you could brute force it, but what if we want to be faster?</p>
+          <p>Explain Euclid's algorithm and how it works</p>
+          <p>Show code and provide demo here</p>
+        <h3>Listing The Pythagorean Triples</h3>
+          <img src="images/Pimpton322.png" alt="A sketch of Pimpton 322">
+          <p>Human's have been listing the pythagorean triples since at least 1800 BC when the Babylonain clay tablet known as Plimpton 322 tablet was made.</p>
+          <p>So, how does one identify the pythagorean triples?</p>
+          <p>You could brute force it...</p>
+          <p>But Euclid's algorithm is useful.</p>
+          <p>How do we get them all... (describe my algorithm)</p>
+          <p>Informationclude code and demo here</p>
+        <h3>String algorithm</h3>
+          <p>This was done out of a goofy impulse. The Art of Programming mentions that most algorithms can be implemented as such, including Euclid's algorithm for computing gcd's, so I wanted to create an emulator.</p>
+          <p>I initially used char arrays, but was bothered my all the memmoves I was performing. It was quite slow</p>
+          <p>Also didn't want to needlessly sift through the arrays of a linked list, so I made my own data type</p>
+          <p>Note, I should really create simple implementations of these other two ways just to demo speed comparisons</p>
+          <p>Talk about my invariants, and my implementation more generally</p>
+          <p>Talk about my regrets for implementing it in c (namely having to make linked lists), but also why it was enjoyable.</p>
+          <p>Talk about the code for checking that the invariants have been preserved for debugging</p>
+          <h4>gdb fun</h4>
+            <p>Talk about learning that you can define your own functions in gdb, and why I did this</p>
+          <h2>See also</h2>
+        <!-- use <ol> for a numbered list instead
+          <ul> is unordered list,
+          <ol> is ordered list
+          <li> is list item -->
+        <ul>
+          <li>
+            <a href = http://www.geom.uiuc.edu/~demo5337/Group3/hist.html>
+              A Brief History of the Pythagorean Theorem
+            </a>
+          </li>
+          <li>
+            <a href = file:///C:/Users/Bradley%20Solliday/Desktop/Digital%20Library/projects/weblog/Robson%20-%20Words%20and%20Pictures%20-%20New%20Light%20on%20Plimpton%20322.pdf>
+              Bablylonian pythagorean triple tablet Plimpton 322
+            </a>
+          </li>
+        </ul>
+    </main>
+
+    <footer>
+
+      <div class="contact">
+        <h5>Contact Information</h5>
+        <p>bms284@cornell.edu</p>
+        <p>(602)-680-9695</p>
+        <p>342 Thurston Avenue</p>
+        <p>Ithaca, NY, 14850</p>
+      </div>
+
+      <div class="sitemap">
+        <h5>Sitemap</h5>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About me</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Support</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Project source codes  </a></li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>
