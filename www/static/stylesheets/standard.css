@@ -1,0 +1,18 @@
+
+h1 {
+	text-align: center;
+}
+
+body {
+	display: block;
+	margin: auto;
+	margin-bottom: 50px;
+	width: 80%;
+	max-width: 1100px;
+}
+
+.demo {
+	display: block;
+	width: 90%;
+	margin: auto;
+}

@@ -48,11 +48,17 @@ ReactDOM.render(
         <Expandable>
           <br/>
           <p>{PCacheIntro}</p>
-          <PrimeCalculator cache_initializer={() => PCache.new(1000000)}/>
+          <div class="demo">
+            <PrimeCalculator cache_initializer={() => PCache.new(1000000)}/>
+          </div>
           <p>{NaiveWasmIntro}</p>
-          <PrimeCalculator cache_initializer={NaivePCache.new}/>
+          <div class="demo">
+            <PrimeCalculator cache_initializer={NaivePCache.new}/>
+          </div>
           <p>{NaiveJsIntro}</p>
-          <PrimeCalculator cache_initializer={() => new NaiveJSPCache}/>
+          <div class="demo">
+            <PrimeCalculator cache_initializer={() => new NaiveJSPCache}/>
+          </div>
         </Expandable>
     </React.Fragment>,
     document.getElementById("primes"));

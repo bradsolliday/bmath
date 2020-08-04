@@ -90,6 +90,7 @@ export class PrimeCalculator extends React.Component {
                        id="auto"
                        checked={this.state.auto_calculate}
                        onChange={this.handleAutoCheck} />
+                <br/>
                 <label htmlFor="nth">Which prime</label>
                 <input type="number"
                        id="nth"
