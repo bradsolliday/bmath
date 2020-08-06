@@ -43,7 +43,7 @@ export class PrimeCalculator extends React.Component {
             this.setState({
                 input_n: new_n,
             });
-            this.calculate();
+            this.calculate(new_n);
         } else {
             this.setState({
                 input_n: new_n
@@ -52,12 +52,12 @@ export class PrimeCalculator extends React.Component {
     }
 
 
-    calculate() {
+    calculate(input_n) {
         let start = Date.now();
-        let prime = this.state.cache.nth_prime(this.state.input_n);
+        let prime = this.state.cache.nth_prime(input_n);
         let delta = Date.now() - start;
         this.setState({
-            n: this.state.input_n,
+            n: input_n,
             nth_prime: prime,
             dtime: delta
         });
@@ -76,7 +76,7 @@ export class PrimeCalculator extends React.Component {
         if (!this.state.auto_calculate) {
             calculate_button = (
                 <button type="button"
-                        onClick={this.calculate}>
+                        onClick={this.calculate.bind(this, this.state.input_n)}>
                     Calculate
                 </button>
             );

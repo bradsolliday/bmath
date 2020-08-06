@@ -48,15 +48,15 @@ ReactDOM.render(
         <Expandable>
           <br/>
           <p>{PCacheIntro}</p>
-          <div class="demo">
+          <div className="demo">
             <PrimeCalculator cache_initializer={() => PCache.new(1000000)}/>
           </div>
           <p>{NaiveWasmIntro}</p>
-          <div class="demo">
+          <div className="demo">
             <PrimeCalculator cache_initializer={NaivePCache.new}/>
           </div>
           <p>{NaiveJsIntro}</p>
-          <div class="demo">
+          <div className="demo">
             <PrimeCalculator cache_initializer={() => new NaiveJSPCache}/>
           </div>
         </Expandable>

@@ -2,6 +2,7 @@ extern crate bmath;
 extern crate console_error_panic_hook;
 
 use wasm_bindgen::prelude::*;
+use bmath::algo::gcd as gcd_impl;
 use bmath::PCache as PCacheImpl;
 
 // When the `wee_alloc` feature is enabled, this uses `wee_alloc` as the global
@@ -18,9 +19,8 @@ pub struct PCache {
 }
 
 #[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(js_namespace = console, js_name = log)]
-    fn log(s: &str);
+pub fn gcd(m: u32, n: u32) -> u32 {
+    gcd_impl(m, n)
 }
 
 #[wasm_bindgen]
