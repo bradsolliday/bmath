@@ -1,8 +1,33 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {gcd} from "../pkg/index_bg.js";
+import {gcd, gcd_factors} from "../pkg/index_bg.js";
 import {BinOp} from "./components/binop.jsx";
 
+function gcd_message(m, n, d) {
+    return "The gcd of " + m + " and " + n + " is " + d + ".";
+}
+
+function gcd_factors_message(m, n, factors) {
+    let symbol = " + ";
+    let b = factors.b()
+    if (b < 0) {
+        symbol = " - ";
+        b = -b;
+    }
+    return factors.a() + "*" + m + symbol + b + "*" + n + " = " + factors.gcd();
+}
+
 ReactDOM.render(
-    <BinOp opName="greatest common divisor" op={gcd}/>,
+    <React.Fragment>
+        <BinOp
+            op={gcd}
+            outputMessage={gcd_message}
+            maxInput={4294967295}
+        />
+        <BinOp
+            op={gcd_factors}
+            outputMessage={gcd_factors_message}
+            maxInput={2147483647}
+        />
+    </React.Fragment>,
     document.getElementById("gcd-demo"));

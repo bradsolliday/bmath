@@ -26,9 +26,9 @@ export class BinOp extends React.Component {
         if (value <= 0) {
             value = 1;
         }
-        const u32MAX = 4294967295;
-        if (value > u32MAX) {
-            value = u32MAX;
+        const MAX = this.props.maxInput;
+        if (value > MAX) {
+            value = MAX;
         }
         this.setState({
             [name]: value
@@ -62,7 +62,8 @@ export class BinOp extends React.Component {
               <input name="input2" type="number" step="1"
                   value={this.state.input2}
                   onChange={this.handleChange} />
-              <p>The {this.props.opName} of {this.state.arg1} and {this.state.arg2} is {this.state.output}</p>
+              <p>{this.props.outputMessage(this.state.arg1, this.state.arg2,
+                  this.state.output)}</p>
               <p>(Time to calculate: {this.state.dtime} miliseconds)</p>
             </React.Fragment>
         );

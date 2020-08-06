@@ -3,6 +3,7 @@ extern crate console_error_panic_hook;
 
 use wasm_bindgen::prelude::*;
 use bmath::algo::gcd as gcd_impl;
+use bmath::algo::gcd_factors as gcd_factors_impl;
 use bmath::PCache as PCacheImpl;
 
 // When the `wee_alloc` feature is enabled, this uses `wee_alloc` as the global
@@ -21,6 +22,40 @@ pub struct PCache {
 #[wasm_bindgen]
 pub fn gcd(m: u32, n: u32) -> u32 {
     gcd_impl(m, n)
+}
+
+#[wasm_bindgen]
+pub struct GCDCoefficients {
+    gcd: isize,
+    a: isize,
+    b: isize
+}
+
+#[wasm_bindgen]
+impl GCDCoefficients {
+    
+    pub fn gcd(&self) -> isize {
+        self.gcd
+    }
+    
+    pub fn a(&self) -> isize {
+        self.a
+    }
+
+    pub fn b(&self) -> isize {
+        self.b
+    }
+}
+
+
+#[wasm_bindgen]
+pub fn gcd_factors(m: isize, n: isize) -> GCDCoefficients {
+    let (d, a, b) = gcd_factors_impl(m, n);
+    GCDCoefficients {
+        gcd: d,
+        a,
+        b
+    }
 }
 
 #[wasm_bindgen]

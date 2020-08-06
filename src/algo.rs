@@ -40,7 +40,7 @@ pub fn gcd<I: PrimInt>(mut m: I, mut n: I) -> I {
 ///     assert!(m % k != 0 || n % k != 0);
 /// }
 /// ```
-pub fn gcd_factors(mut m: i64, mut n: i64) -> (i64, i64, i64) {
+pub fn gcd_factors(mut m: isize, mut n: isize) -> (isize, isize, isize) {
     debug_assert!(m > 0 && n > 0, "Arguments must be positive");
     // Invaraint D: (always true)
     //      n == 0  => m = gcd(m_original, n_original)
