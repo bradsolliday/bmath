@@ -22,7 +22,7 @@ export class BinOp extends React.Component {
 
     handleChange(event) {
         const name = event.target.name;
-        let value = Number(event.target.value);
+        let value = Math.floor(Number(event.target.value));
         if (value <= 0) {
             value = 1;
         }

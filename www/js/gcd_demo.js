@@ -19,15 +19,19 @@ function gcd_factors_message(m, n, factors) {
 
 ReactDOM.render(
     <React.Fragment>
+      <div className="demo">
         <BinOp
             op={gcd}
             outputMessage={gcd_message}
             maxInput={4294967295}
         />
+      </div>
+      <div className="demo">
         <BinOp
             op={gcd_factors}
             outputMessage={gcd_factors_message}
             maxInput={2147483647}
         />
+      </div>
     </React.Fragment>,
     document.getElementById("gcd-demo"));

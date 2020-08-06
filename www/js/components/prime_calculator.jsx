@@ -35,7 +35,7 @@ export class PrimeCalculator extends React.Component {
     }
 
     handleChange(event) {
-        let new_n = Number(event.target.value);
+        let new_n = Math.floor(Number(event.target.value));
         if (new_n <= 0) {
             new_n = 1;
         }
