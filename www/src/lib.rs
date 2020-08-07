@@ -1,10 +1,15 @@
 extern crate bmath;
 extern crate console_error_panic_hook;
 
+mod data_grid;
+
+pub use data_grid::MyGrid;
+
 use wasm_bindgen::prelude::*;
 use bmath::algo::gcd as gcd_impl;
 use bmath::algo::gcd_factors as gcd_factors_impl;
 use bmath::PCache as PCacheImpl;
+
 
 // When the `wee_alloc` feature is enabled, this uses `wee_alloc` as the global
 // allocator.
