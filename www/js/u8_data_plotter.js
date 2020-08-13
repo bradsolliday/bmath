@@ -17,6 +17,12 @@ export class U8DataPlotter {
         this.dataPtrGetter = dataPtrGetter;
         this.updater = updater;
         this.colorMap = colorMap;
+        this.animationId = null;
+        this.renderLoop = () => {
+            this.updater();
+            this.drawCells();
+            this.animationId = requestAnimationFrame(this.renderLoop);
+        };
     }
 
     getIndex(row, col) {
@@ -49,14 +55,22 @@ export class U8DataPlotter {
         ctx.stroke();
     };
 
+    isPaused() {
+        return this.animationId === null;
+    }
+
+    play() {
+        this.renderLoop();
+    }
+
+    pause() {
+        cancelAnimationFrame(this.animationId);
+        this.animationId = null;
+    }
+
     render() {
-        const renderLoop = () => {
-            this.updater();
-            this.drawCells();
-            requestAnimationFrame(renderLoop);
-        };
         this.drawCells();
-        requestAnimationFrame(renderLoop);
+        this.animationId = requestAnimationFrame(this.renderLoop);
     }
                 
 }
