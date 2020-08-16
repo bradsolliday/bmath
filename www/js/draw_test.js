@@ -17,7 +17,8 @@ const canvas = document.getElementById("my-canvas");
 let grid = MyGrid.new();
 let plotter = new U8DataPlotter(memory, () => grid.cells(),
                     grid.rows(), grid.cols(), canvas,
-                    () => grid.update(), colorMap);
+                    grid.update.bind(grid), colorMap,
+                    (row, col) => grid.toggle_cell(row, col));
 ReactDOM.render(
     <PlayPause 
       isPaused={plotter.isPaused.bind(plotter)}

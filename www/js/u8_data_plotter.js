@@ -7,7 +7,10 @@ const CELL_SIZE = 5;
 export class U8DataPlotter {
 
     constructor(memory, dataPtrGetter, rows, cols, canvas, updater,
-        colorMap) {
+        colorMap, toggle_cell) {
+        canvas.addEventListener("click", event => {
+            this.toggleListener(event, canvas);
+        });
         canvas.height = rows * CELL_SIZE;
         canvas.width  = cols * CELL_SIZE;
         this.ctx = canvas.getContext('2d');
@@ -17,6 +20,7 @@ export class U8DataPlotter {
         this.dataPtrGetter = dataPtrGetter;
         this.updater = updater;
         this.colorMap = colorMap;
+        this.toggle_cell = toggle_cell;
         this.animationId = null;
         this.renderLoop = () => {
             this.updater();
@@ -44,8 +48,8 @@ export class U8DataPlotter {
                 ctx.fillStyle = this.colorMap(cells[idx]);
 
                 ctx.fillRect(
-                    (this.COLS - col) * CELL_SIZE,
-                    row * CELL_SIZE,
+                    col * CELL_SIZE,
+                    (this.ROWS - 1 - row) * CELL_SIZE,
                     CELL_SIZE,
                     CELL_SIZE
                 );
@@ -71,6 +75,34 @@ export class U8DataPlotter {
     render() {
         this.drawCells();
         this.animationId = requestAnimationFrame(this.renderLoop);
+    }
+
+    toggleListener(event, canvas) {
+        const boundingRect = canvas.getBoundingClientRect();
+
+        const scaleX = canvas.width / boundingRect.width;
+        const scaleY = canvas.height / boundingRect.height;
+
+        
+        const canvasLeft = (event.clientX - boundingRect.left) * scaleX;
+        const canvasTop  = (event.clientY - boundingRect.top)  * scaleY;
+
+
+        const row = this.COLS - 1 - Math.max(
+                        Math.min(Math.floor(canvasTop / CELL_SIZE), this.COLS - 1),
+                        0
+                    );
+        const col = Math.max(
+                        Math.min(Math.floor(canvasLeft / CELL_SIZE), this.ROWS - 1),
+                        0
+                    );
+
+
+        const dataPtr = this.dataPtrGetter();
+        const cells = new Uint8Array(this.memory.buffer, dataPtr,
+                            this.ROWS * this.COLS);
+        this.toggle_cell(row, col);
+        this.drawCells();
     }
                 
 }

@@ -9,6 +9,15 @@ pub struct MyGrid {
     cells: Vec<Wrapping<u8>>
 }
 
+trait Toggle {
+    fn toggle(&mut self);
+}
+impl Toggle for Wrapping<u8> {
+    fn toggle(&mut self) {
+        *self = Wrapping(0);
+    }
+}
+
 #[wasm_bindgen]
 impl MyGrid {
 
@@ -42,6 +51,16 @@ impl MyGrid {
     pub fn cells(&self) -> *const Wrapping<u8> {
         self.cells.as_ptr()
     }
+
+    fn get_index(&self, row: u32, col: u32) -> usize {
+        (row * self.cols + col) as usize
+    }
+
+    pub fn toggle_cell(&mut self, row: u32, col: u32) {
+        let idx = self.get_index(row, col);
+        self.cells[idx].toggle();
+    }
+        
 }
 
 #[cfg(test)]
