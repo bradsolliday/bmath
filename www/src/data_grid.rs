@@ -19,6 +19,13 @@ impl Toggle for Wrapping<u8> {
 }
 
 #[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(a: u8);
+}
+
+
+#[wasm_bindgen]
 impl MyGrid {
 
     pub fn new() -> MyGrid {
@@ -36,6 +43,7 @@ impl MyGrid {
 
     pub fn update(&mut self) {
         for p in &mut self.cells {
+            log(p.0);
             *p += Wrapping(1);
         }
     }

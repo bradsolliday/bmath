@@ -2,8 +2,10 @@ extern crate bmath;
 extern crate console_error_panic_hook;
 
 mod data_grid;
+mod wave_grid;
 
 pub use data_grid::MyGrid;
+pub use wave_grid::WaveGrid;
 
 use wasm_bindgen::prelude::*;
 use bmath::algo::gcd as gcd_impl;
