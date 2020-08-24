@@ -6,7 +6,7 @@ export class PlayPause extends React.Component {
         super(props);
 
         this.state = {
-            text: "⏸" // A pause button
+            text: "▶"
         }
     }
 

@@ -5,19 +5,24 @@ import React from "react";
 import ReactDOM from "react-dom";
 import {PlayPause} from "./components/play_pause.jsx";
 
-
-function colorMap(f32) {
-    f32 = f32 + 1;
-    if (f32 < 0) {
-        alert("pixel value was negative even after adjustment");
-    }
-    let hex = Math.floor(f32 * 100).toString(16);
+let colorArray = [];
+for (let i = 0; i < 256; i++) {
+    let hex = i.toString(16);
     if (hex.length === 1) {
         hex = "0" + hex;
     }
-    return "#" + hex + hex + hex;
+    colorArray[i] = "#" + hex + hex + hex;
 }
-    
+
+function colorMap(f32) {
+    if (f32 < 0) {
+        alert("pixel value was negative");
+    }
+    if (f32 > 255) {
+        alert("pixel value was greater than 255");
+    }
+    return colorArray[Math.floor(f32)];
+}
 
 const canvas = document.getElementById("my-canvas");
 let grid = WaveGridF32.new();
@@ -25,10 +30,15 @@ let plotter = new DataPlotter(grid, memory, canvas,
                     colorMap, Float32Array);
 
 ReactDOM.render(
-    <PlayPause 
-      isPaused={plotter.isPaused.bind(plotter)}
-      play={plotter.play.bind(plotter)}
-      pause={plotter.pause.bind(plotter)}
-    />,
+    <React.Fragment>
+      <PlayPause 
+        isPaused={plotter.isPaused.bind(plotter)}
+        play={plotter.play.bind(plotter)}
+        pause={plotter.pause.bind(plotter)}
+      />
+      <button onClick={plotter.reset.bind(plotter)}>
+        Reset Field
+      </button>
+    </React.Fragment>,
     document.getElementById("animation-button"));
 plotter.render();

@@ -8,7 +8,7 @@ trait Toggle {
 
 impl Toggle for f32 {
     fn toggle_position(&mut self) {
-        *self = 1.0;
+        *self = 225.0;
     }
 
     fn toggle_velocity(&mut self) {
@@ -26,6 +26,8 @@ pub struct WaveGridF32 {
     auxiliary_velocities: Vec<f32>
 }
 
+const BACKGROUND_VALUE: f32 = 125.0_f32;
+
 #[wasm_bindgen]
 impl WaveGridF32 {
 
@@ -36,7 +38,7 @@ impl WaveGridF32 {
         WaveGridF32 {
             rows,
             cols,
-            active_positions: vec![0.0; length],
+            active_positions: vec![BACKGROUND_VALUE; length],
             active_velocities: vec![0.0; length],
             auxiliary_positions: vec![0.0; length],
             auxiliary_velocities: vec![0.0; length]
@@ -58,28 +60,28 @@ impl WaveGridF32 {
             if col + 1 < cols_isize {
                 self.active_positions[(center_index + 1) as usize]
             } else {
-                0.0
+                BACKGROUND_VALUE
             }
         };
         let left = {
             if col > 0 {
                 self.active_positions[(center_index - 1) as usize]
             } else {
-                0.0
+                BACKGROUND_VALUE
             }
         };
         let up = {
             if row + 1 < rows_isize {
                 self.active_positions[(center_index + cols_isize) as usize]
             } else {
-                0.0
+                BACKGROUND_VALUE
             }
         };
         let down = {
             if row > 0 {
                 self.active_positions[(center_index - cols_isize) as usize]
             } else {
-                0.0
+                BACKGROUND_VALUE
             }
         };
         right + left + up + down - 4.0 * center
@@ -107,10 +109,12 @@ impl /*Plottable<f32> for*/ WaveGridF32 {
         let mut index: usize = 0;
         for row in 0..self.rows {
             for col in 0..self.cols {
-                let acceleration: f32 =
-                    self.gradient(index as isize, row as isize, col as isize);
+                let mut acceleration: f32 =
+                    4.0 * self.gradient(index as isize, row as isize, col as isize);
                 let x = self.active_positions[index];
                 let v = self.active_velocities[index];
+
+                acceleration -= v/8.0;
 
                 let dt: f32 = 0.0078125;
                 let dx = v*dt + 0.5*acceleration*dt*dt;
@@ -137,4 +141,14 @@ impl /*Plottable<f32> for*/ WaveGridF32 {
     pub fn data_pointer(&self) -> *const f32 {
         self.active_positions.as_ptr()
     }
+
+    pub fn reset(&mut self) {
+        for x in &mut self.active_positions {
+            *x = BACKGROUND_VALUE;
+        }
+        for v in &mut self.active_velocities {
+            *v = 0.0;
+        }
+    }
+
 }

@@ -21,13 +21,17 @@
     </header>
 
     <main>
-      <canvas id="my-canvas"></canvas>
-      <div id="animation-button"></div>
       <div id="introduction">
         <p>This website is built and maintained by Bradley Solliday to demo various cool ideas and his code</p>
         <p>All the code demonstrated here can be found on the linked github repository (including the files for building this website).</p>
         <p>This site is hosted on Github pages, meaning all the content on it is statically served. I'm using React to make writing the user interface easier, and webpack as my bundler. While the underlying repository is written mostly in Rust, The rust library, wasm-bindgen, makes it easy to export the code into Web Assembly, and the wasm-pack plugin makes it easy to import the resulting Web Assembly in javascript.</p>
       </div>
+
+      <h2>Wave Simulator</h2>
+      <p>Below is a simple wave simulator where each simulated point is represented by a pixel-like square, and the magnitude is represented by the color of the square. The magnitude of the wave is set to be a constant along the whole boundary.</p>
+      <p>Click on any square to "disturb" the wave, setting the magnitude to be large and the rate of change of the magnitude of the wave to be zero.</p>
+      <canvas id="my-canvas"></canvas>
+      <div id="animation-button"></div>
 
       <h2>Calculating Prime Numbers</h2>
       <p>Below is a demo of a method of calculating prime numbers based on the Sieve of Eratosthenes, but modified to allow the calculation of arbitrarily large prime numbers. See the documentation for the implementation <strong><a href="./doc/bmath/struct.PCache.html">here</a></strong> (note, the code is written in Rust).</p>

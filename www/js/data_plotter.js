@@ -35,6 +35,7 @@ export class DataPlotter {
             this.data.update();
             this.data.update();
             this.data.update();
+            this.data.update();
             this.drawCells();
             this.animationId = requestAnimationFrame(this.renderLoop);
         };
@@ -87,7 +88,6 @@ export class DataPlotter {
 
     render() {
         this.drawCells();
-        this.animationId = requestAnimationFrame(this.renderLoop);
     }
 
     toggleListener(event, canvas) {
@@ -113,6 +113,11 @@ export class DataPlotter {
                     );
 
         this.data.toggle_cell(row, col);
+        this.drawCells();
+    }
+
+    reset() {
+        this.data.reset();
         this.drawCells();
     }
                 
