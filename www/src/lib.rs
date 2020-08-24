@@ -4,11 +4,13 @@ extern crate console_error_panic_hook;
 mod data_grid;
 mod wave_grid;
 mod wave_grid_f32;
+//mod plottable;
 
 pub use data_grid::MyGrid;
 pub use wave_grid::WaveGrid;
 pub use wave_grid_f32::WaveGridF32;
 
+//use plottable::Plottable;
 use wasm_bindgen::prelude::*;
 use bmath::algo::gcd as gcd_impl;
 use bmath::algo::gcd_factors as gcd_factors_impl;

@@ -1,4 +1,5 @@
 use wasm_bindgen::prelude::*;
+//use crate::Plottable;
 
 trait Toggle {
     fn toggle_position(&mut self);
@@ -29,8 +30,8 @@ pub struct WaveGridF32 {
 impl WaveGridF32 {
 
     pub fn new() -> WaveGridF32 {
-        let rows = 32;
-        let cols = 32;
+        let rows = 64;
+        let cols = 64;
         let length = rows * cols;
         WaveGridF32 {
             rows,
@@ -42,7 +43,10 @@ impl WaveGridF32 {
         }
     }
 
-    pub fn get_index(&self, row: usize, col: usize) -> usize {
+}
+
+impl WaveGridF32 {
+    fn get_index(&self, row: usize, col: usize) -> usize {
         row * self.cols + col
     }
 
@@ -54,31 +58,49 @@ impl WaveGridF32 {
             if col + 1 < cols_isize {
                 self.active_positions[(center_index + 1) as usize]
             } else {
-                center
+                0.0
             }
         };
         let left = {
             if col > 0 {
                 self.active_positions[(center_index - 1) as usize]
             } else {
-                center
+                0.0
             }
         };
         let up = {
             if row + 1 < rows_isize {
                 self.active_positions[(center_index + cols_isize) as usize]
             } else {
-                center
+                0.0
             }
         };
         let down = {
             if row > 0 {
                 self.active_positions[(center_index - cols_isize) as usize]
             } else {
-                center
+                0.0
             }
         };
         right + left + up + down - 4.0 * center
+    }
+
+}
+
+// Note, I was hoping to use the trait Plottable<f32> to ensure that the
+// Rust implementation had all the functions javascript required, but,
+// apparently due to namespace collision issues, it's not currently allowed.
+// So instead this will be just a plain impl block rather than an
+// impl Plottable<f32> for WaveGridF32 block.
+#[wasm_bindgen]
+impl /*Plottable<f32> for*/ WaveGridF32 {
+
+    pub fn rows(&self) -> usize {
+        self.rows
+    }
+
+    pub fn cols(&self) -> usize {
+        self.cols
     }
 
     pub fn update(&mut self) {
@@ -90,7 +112,7 @@ impl WaveGridF32 {
                 let x = self.active_positions[index];
                 let v = self.active_velocities[index];
 
-                let dt: f32 = 0.25;
+                let dt: f32 = 0.0078125;
                 let dx = v*dt + 0.5*acceleration*dt*dt;
                 let dv = acceleration*dt;
 
@@ -106,21 +128,13 @@ impl WaveGridF32 {
                        &mut self.auxiliary_velocities);
     }
 
-    pub fn rows(&self) -> usize {
-        self.rows
-    }
-
-    pub fn cols(&self) -> usize {
-        self.cols
-    }
-
-    pub fn positions(&self) -> *const f32 {
-        self.active_positions.as_ptr()
-    }
-
     pub fn toggle_cell(&mut self, row: usize, col: usize) {
         let index = self.get_index(row, col);
         self.active_positions[index].toggle_position();
         self.active_velocities[index].toggle_velocity();
+    }
+
+    pub fn data_pointer(&self) -> *const f32 {
+        self.active_positions.as_ptr()
     }
 }
