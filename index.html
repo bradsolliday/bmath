@@ -27,6 +27,19 @@
         <p>This site is hosted on Github pages, meaning all the content on it is statically served. I'm using React to make writing the user interface easier, and webpack as my bundler. While the underlying repository is written mostly in Rust, The rust library, wasm-bindgen, makes it easy to export the code into Web Assembly, and the wasm-pack plugin makes it easy to import the resulting Web Assembly in javascript.</p>
       </div>
 
+      <h2>Wave Simulator</h2>
+      <div class="grid-container">
+        <div class="grid-child">
+          <p>To the right is a simple wave simulator where each simulated point is represented by a pixel-like square, and the magnitude is represented by the color of the square. The magnitude of the wave is set to be a constant along the whole boundary.</p>
+          <p>Click on any square to "disturb" the wave, setting the magnitude to be large and the rate of change of the magnitude of the wave to be zero.</p>
+          <p>Note, the animation will not begin until you hit the play button, and will continue playing until you hit pause. The animation does not need to be paused in order to click and "disturb" the wave.</p>
+        </div>
+        <div class="grid-child">
+          <canvas id="my-canvas"></canvas>
+          <div id="animation-button"></div>
+        </div>
+      </div>
+
       <h2>Calculating Prime Numbers</h2>
       <p>Below is a demo of a method of calculating prime numbers based on the Sieve of Eratosthenes, but modified to allow the calculation of arbitrarily large prime numbers. See the documentation for the implementation <strong><a href="./doc/bmath/struct.PCache.html">here</a></strong> (note, the code is written in Rust).</p>
       <p>Beware, I haven't yet gotten around to setting the code to run in the background, so if it takes a moment to calculate the first 1 million primes, think twice before adding another zero as the user interface will freeze until the calculation is complete (you can always close and reopen the page of course).</p>
