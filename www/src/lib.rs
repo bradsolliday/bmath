@@ -1,13 +1,9 @@
 extern crate bmath;
 extern crate console_error_panic_hook;
 
-mod data_grid;
-mod wave_grid;
 mod wave_grid_f32;
 //mod plottable;
 
-pub use data_grid::MyGrid;
-pub use wave_grid::WaveGrid;
 pub use wave_grid_f32::WaveGridF32;
 
 //use plottable::Plottable;
