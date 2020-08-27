@@ -16,10 +16,9 @@ for (let i = 0; i < 256; i++) {
 
 function colorMap(f32) {
     if (f32 < 0) {
-        alert("pixel value was negative");
-    }
-    if (f32 > 255) {
-        alert("pixel value was greater than 255");
+        f32 = 0;
+    } else if (f32 > 255) {
+        f32 = 255;
     }
     return colorArray[Math.floor(f32)];
 }
