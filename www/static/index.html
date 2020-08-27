@@ -28,10 +28,17 @@
       </div>
 
       <h2>Wave Simulator</h2>
-      <p>Below is a simple wave simulator where each simulated point is represented by a pixel-like square, and the magnitude is represented by the color of the square. The magnitude of the wave is set to be a constant along the whole boundary.</p>
-      <p>Click on any square to "disturb" the wave, setting the magnitude to be large and the rate of change of the magnitude of the wave to be zero.</p>
-      <canvas id="my-canvas"></canvas>
-      <div id="animation-button"></div>
+      <div class="grid-container">
+        <div class="grid-child">
+          <p>To the right is a simple wave simulator where each simulated point is represented by a pixel-like square, and the magnitude is represented by the color of the square. The magnitude of the wave is set to be a constant along the whole boundary.</p>
+          <p>Click on any square to "disturb" the wave, setting the magnitude to be large and the rate of change of the magnitude of the wave to be zero.</p>
+          <p>Note, the animation will not begin until you hit the play button, and will continue playing until you hit pause. The animation does not need to be paused in order to click and "disturb" the wave.</p>
+        </div>
+        <div class="grid-child">
+          <canvas id="my-canvas"></canvas>
+          <div id="animation-button"></div>
+        </div>
+      </div>
 
       <h2>Calculating Prime Numbers</h2>
       <p>Below is a demo of a method of calculating prime numbers based on the Sieve of Eratosthenes, but modified to allow the calculation of arbitrarily large prime numbers. See the documentation for the implementation <strong><a href="./doc/bmath/struct.PCache.html">here</a></strong> (note, the code is written in Rust).</p>

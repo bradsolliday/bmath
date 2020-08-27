@@ -16,3 +16,12 @@ body {
 	width: 90%;
 	margin: auto;
 }
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 0px;
+    justify-items: end;
+}
+
+.grid-child {}
