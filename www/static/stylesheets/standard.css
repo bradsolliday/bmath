@@ -20,7 +20,7 @@ body {
 .grid-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 0px;
+    grid-gap: 10px;
     justify-items: end;
 }
 
