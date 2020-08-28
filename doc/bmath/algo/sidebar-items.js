@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["gcd","Returns the greatest common divisors of n and m     using euclid's algorithm. Precondition: n and m are positive."],["gcd_factors","Returns (d, a, b) where d is the gcd of n and m, and a and b such that am + bn = d. # Precondition m and n are positive. "]]});
