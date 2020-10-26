@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Finite Differences</title>
+    <link href="stylesheets/standard.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+
+    <h1>Finite Differences</h1>
+
+    <h2>Taking Derivatives</h2>
+      <p>Suppose we want to numerically take the derivative of a function \(f\), in either functional form or as a list of evenly spaced values. For example, we might have \(f(x) = cos(x)\) and we want to represent is as an array \(F\) of length \(n\) in the range \([0, 1]\), we could define</p>
+      <p>$$\Delta x=\frac{1 - 0}{n - 1}$$</p>
+      <p>and let $$F[k] = f(0 + k\Delta x)\hspace{3ex}\forall k\in\{0,1,\dots,n-1\}.$$</p>
+      <p>Perhaps the most obvious thing to is to just use the definition of the derivative as our mode, so, since</p>
+      <p>$$f'(x)=\lim_{h\rightarrow0}\frac{f(x+h)-f(x)}{h},$$ we can define $$F'[i] = \frac{F'[i+1]-F'[i]}{\Delta x}$$</p>
+      <p>Of course, it would have been equally valid to think of \(h\) as a negative value approaching 0. Thinking of it this way, we might write the derivative as</p>
+      <p>$$F'[i] = \frac{F'[i]-F'[i-1]}{\Delta x}$$</p>
+      <p>Graphically, we'd represent this as</p>
+      <img src="images/cos_forward_backward_deriv_approx.png">
+      <p>Where the black curve is a segment of the plot of \(cos(x)\), the dashed redline is the linear approximation of \(cos(x)\) at 0.2 using the "forward" approximation of the derivative, and the dashed blue line is the linear approximation using the "backward" approximation of the derivative.</p>
+      <p>In the image, however, we can see that one approximation overshoots and the other undershoots the true value of the derivative. If we look at the first fewterms of the taylor series of \(f\),</p>
+      <p>$$f(x+h) = f(x) + f'(x)h + \frac{f''(x)}{2}h^2 + \dots$$</p>
+      <p>So the leading error in our approximation of \(\frac{f(x+h)-f(x)}{h}\) is \(\frac{f''(x)}{2}h\). This means that, unless we're looking at an inflection point (where \(f''(x)=0\)), the forward and backward approximations will err on opposite ends of the true derivative.</p>
+      <p>This suggests that the average of the two approximations would be better:</p>
+      <p>$$\frac{ \frac{f(x+h)-f(x)}{h} + \frac{f(x)-f(x-h)}{h} }{2} = \frac{f(x+h)-f(x-h)}{2h}.$$</p>
+      <p>Looking at the graphed results, we definitely see a big improvement:</p>
+      <img src="images/cos_forward_backward_centered_deriv_approx.png">
+      <p>Here, the (now dotted) red and blue lines are the same, but not the green lines have the new averaged or "centered" slope, with the dotted green line being the cord connecting \(f(x-h)\) and \(f(x+h)\), and the dashed green line being the same cord translated to intersect \((x, f(x))\).</p>
+      <p>We can get a more rigorous explanation for this improvement by looking ataylor series of this new approximation:</p>
+      <p>$$\begin{align*} f(x+h) - f(x-h) &= f(x) + f'(x)h + \frac{f''(x)}{2}h^2 + \frac{f'''(x)}{6}h^3 +\dots\\ &- f(x) + f'(x)h - \frac{f''(x)}{2}h^2 + \frac{f'''(x)}{6}h^3 - \dots\\ &= 2f'(x)h + \frac{f'''(x)}{3}h^3 + \dots\end{align*}$$</p>
+      <p>So $$\frac{f(x+h) - f(x-h)}{2h} = f'(x) + \frac{f'''(x)}{6}h^2 + \dots$$</p>
+      <p>Now, our error is \(O(h^2)\) (rather than \(O(h)\)), which is a good improvement! So it's better to approximate our derivative as</p>
+      <p>$$F'[i] = \frac{F[i + 1] - F[i - 1]}{2h}$$</p>
+      <p>than as a simple forward or backward approximation.</p>
+    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </body>
+</html>
