@@ -77,7 +77,7 @@ plot_comparison_graph(
     vecd exact_x(e_eval_pts);
     vecd exact_soln(e_eval_pts);
     const double e_step_size = (e_end - e_start) / (e_eval_pts - 1);
-    double xe = start;
+    double xe = e_start;
     for (int i = 0; i < e_eval_pts; ++i) {
         exact_x[i] = xe;
         exact_soln[i] = u(xe);
@@ -104,16 +104,16 @@ plot_comparison_graph(
 
 int main() {
     using namespace Eigen;
-    const int n = 100; // The number of points we evaluate at
+    const int n = 10; // The number of points we evaluate at
     const double start = 0;
     const double end = 1;
 
-    // Builging the top matrix T
+    // Building the top matrix T
     const SparseMatrix<double> T = top_matrix(n);
 
     // Initializing the force vector F
-    const double h = (end - start) / (n - 1.0);
-    const VectorXd F = force_vector(start, h, n);
+    const double h = (end - start) / (n + 0.5);
+    const VectorXd F = force_vector(start + h/2, h, n);
 
     // Solving
     SimplicialLLT<SparseMatrix<double>> solver;
@@ -128,5 +128,5 @@ int main() {
         return 1;
     }
 
-    plot_comparison_graph(U, start, h);
+    plot_comparison_graph(U, start + h/2, h);
 }
