@@ -61,6 +61,47 @@ force_vector(double start, double step_size, int size) {
     return out;
 }
 
+// Plots the values of predicted with the spacing starting at start with step
+// size step_size
+void
+plot_comparison_graph(
+        const Eigen::VectorXd& predicted,
+        double start,
+        double step_size) {
+    typedef std::vector<double> vecd;
+
+    // Constructing the values of the exact solution u we wish to plot against
+    const int e_eval_pts = 1000; //read e as exact
+    const double e_start = 0;
+    const double e_end = 1;
+    vecd exact_x(e_eval_pts);
+    vecd exact_soln(e_eval_pts);
+    const double e_step_size = (e_end - e_start) / (e_eval_pts - 1);
+    double xe = start;
+    for (int i = 0; i < e_eval_pts; ++i) {
+        exact_x[i] = xe;
+        exact_soln[i] = u(xe);
+        xe += e_step_size;
+    }
+
+    plt::plot(exact_x, exact_soln, "k");
+        
+    // Converting predicted to a std::vector<double and constructing the
+    // x-values we are plotting it against
+    const int predicted_pts = predicted.size();
+    vecd predicted_soln(predicted.data(), predicted.data() + predicted_pts);
+    vecd predicted_x(predicted_pts);
+    double xp = start;
+    for (int i = 0; i < predicted_pts; ++i) {
+        predicted_x[i] = xp;
+        xp += step_size;
+    }
+
+    plt::plot(predicted_x, predicted_soln, "r+");
+
+    plt::show();
+}
+
 int main() {
     using namespace Eigen;
     const int n = 100; // The number of points we evaluate at
@@ -81,25 +122,11 @@ int main() {
         std::cout << "The solver failed at computing T\n";
         return 1;
     }
-    VectorXd U;
-    U = h * h * solver.solve(F);
+    const VectorXd U = h * h * solver.solve(F);
     if (solver.info() != Success) {
         std::cout << "The solver failed at computing U\n";
         return 1;
     }
 
-    std::vector<double> xpoints(n);
-    std::vector<double> exact_soln(n);
-    double x = start;
-    for (int i = 0; i < n; ++i) {
-        xpoints[i] = x;
-        exact_soln[i] = u(x);
-        x += h;
-    }
-
-    std::vector<double> Upoints(U.data(), U.data() + U.size());
-
-    plt::plot(xpoints, Upoints, "b");
-    plt::plot(xpoints, exact_soln, "r+");
-    plt::show();
+    plot_comparison_graph(U, start, h);
 }
