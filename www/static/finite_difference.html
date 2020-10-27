@@ -13,7 +13,7 @@
       <p>Suppose we want to numerically take the derivative of a function \(f\), in either functional form or as a list of evenly spaced values. For example, we might have \(f(x) = cos(x)\) and we want to represent is as an array \(F\) of length \(n\) in the range \([0, 1]\), we could define</p>
       <p>$$\Delta x=\frac{1 - 0}{n - 1}$$</p>
       <p>and let $$F[k] = f(0 + k\Delta x)\hspace{3ex}\forall k\in\{0,1,\dots,n-1\}.$$</p>
-      <p>Perhaps the most obvious thing to is to just use the definition of the derivative as our mode, so, since</p>
+      <p>Perhaps the most obvious thing to is to just use the definition of the derivative as our model, so, since</p>
       <p>$$f'(x)=\lim_{h\rightarrow0}\frac{f(x+h)-f(x)}{h},$$ we can define $$F'[i] = \frac{F'[i+1]-F'[i]}{\Delta x}$$</p>
       <p>Of course, it would have been equally valid to think of \(h\) as a negative value approaching 0. Thinking of it this way, we might write the derivative as</p>
       <p>$$F'[i] = \frac{F'[i]-F'[i-1]}{\Delta x}$$</p>
@@ -28,13 +28,61 @@
       <p>Looking at the graphed results, we definitely see a big improvement:</p>
       <img src="images/cos_forward_backward_centered_deriv_approx.png">
       <p>Here, the (now dotted) red and blue lines are the same, but not the green lines have the new averaged or "centered" slope, with the dotted green line being the cord connecting \(f(x-h)\) and \(f(x+h)\), and the dashed green line being the same cord translated to intersect \((x, f(x))\).</p>
-      <p>We can get a more rigorous explanation for this improvement by looking ataylor series of this new approximation:</p>
+      <p>We can get a more rigorous explanation for this improvement by looking at the Taylor series of this new approximation:</p>
       <p>$$\begin{align*} f(x+h) - f(x-h) &= f(x) + f'(x)h + \frac{f''(x)}{2}h^2 + \frac{f'''(x)}{6}h^3 +\dots\\ &- f(x) + f'(x)h - \frac{f''(x)}{2}h^2 + \frac{f'''(x)}{6}h^3 - \dots\\ &= 2f'(x)h + \frac{f'''(x)}{3}h^3 + \dots\end{align*}$$</p>
       <p>So $$\frac{f(x+h) - f(x-h)}{2h} = f'(x) + \frac{f'''(x)}{6}h^2 + \dots$$</p>
       <p>Now, our error is \(O(h^2)\) (rather than \(O(h)\)), which is a good improvement! So it's better to approximate our derivative as</p>
       <p>$$F'[i] = \frac{F[i + 1] - F[i - 1]}{2h}$$</p>
       <p>than as a simple forward or backward approximation.</p>
-    
+
+    <h2>Matrix Representation</h2>
+      <p>It'' be convenient at this point to not that we can represent these finite difference approximations of the derivative as a matri. This should almost be expected, considering differentiation is a linear operator and how all lineaer functions on finite vector spaces can eb represented as matrices.</p>
+      <p>By considering its action, the forward difference \(f(x+h)-f(x)\) can be represented by the nxn matrix (with n = 7 here)</p>
+      <p>$$\Delta_+ \equiv \left[\begin{array}{rr}-1&1&0&0&0&0&0\\0&-1&1&0&0&0&0\\0&0&-1&1&0&0&0\\0&0&0&-1&1&0&0\\0&0&0&0&-1&1&0\\0&0&0&0&0&-1&1\\0&0&0&0&0&0&-1\end{array}\right],$$</p>
+      <p>the backward difference \(f(x)-f(x-h)\) as</p>
+      <p>$$\Delta_- \equiv \left[\begin{array}{rr}1&0&0&0&0&0&0\\-1&1&0&0&0&0&0\\0&-1&1&0&0&0&0\\0&0&-1&1&0&0&0\\0&0&0&-1&1&0&0\\0&0&0&0&-1&1&0\\0&0&0&0&0&-1&1\end{array}\right],$$</p>
+      <p>and the centered difference \(f(x+h) - f(x-h)\) as</p>
+      <p>$$\Delta_0 \equiv \left[\begin{array}{rr}0&1&0&0&0&0&0\\-1&0&1&0&0&0&0\\0&-1&0&1&0&0&0\\0&0&-1&0&1&0&0\\0&0&0&-1&0&1&0\\0&0&0&0&-1&0&1\\0&0&0&0&0&-1&0\end{array}\right],$$</p>
+      <p>where we divide by the appropriate spacing (\(\frac1h\Delta_-\), \(\frac1h\Delta_+\), \(\frac1{2h}\Delta_0\)) to use it as a derivative.</p>
+      <p>You might have noticed that the bottom row of \(\Delta_+\) and the top row of \(\Delta_-\) don't fit the pattern set y the rest of the rows. If you're worried this is an artifact of our matrix representation, worry not as these anomalies were present in our algebraic representation as well. For example, what value do you use for \(f(x-h)\) when we only have defined \(f\) on values greater than x?</p>
+      <p>We can still consider the implications though. By simply truncating the matrices at some finite size, we are implicity assuming that \(f(x)=0\) outside of our interval.<p>
+
+    <h2>Second Derivatives</h2>
+      <p>Of course, if we are approximating our derivatives as finite differences which can be represented as matrices, it's easy to consider how we might take a second derivative. Just apply our finite differences twice!</p>
+      <p>But which ones? We get difference answers depending on our order:</p>
+      <p>$$\Delta_+\Delta_+ = \left[\begin{array}{rr}1&-2&1&0&0&0&0\\0&1&-2&1&0&0&0\\0&0&1&-2&1&0&0\\0&0&0&1&-2&1&0\\0&0&0&0&1&-2&1\\0&0&0&0&0&1&-2\\0&0&0&0&0&0&1\end{array}\right]$$</p>
+      <p>$$\Delta_-\Delta_- = \left[\begin{array}{rr}1&0&0&0&0&0&0\\-2&1&0&0&0&0&0\\1&-2&1&0&0&0&0\\0&1&-2&1&0&0&0\\0&0&1&-2&1&0&0\\0&0&0&1&-2&1&0\\0&0&0&0&1&-2&1\end{array}\right]$$</p>
+      <p>$$\Delta_+\Delta_- = \left[\begin{array}{rr}-2&1&0&0&0&0&0\\1&-2&1&0&0&0&0\\0&1&-2&1&0&0&0\\0&0&1&-2&1&0&0\\0&0&0&1&-2&1&0\\0&0&0&0&1&-2&1\\0&0&0&0&0&1&-1\end{array}\right]$$</p>
+      <p>$$\Delta_-\Delta_+ = \left[\begin{array}{rr}-1&1&0&0&0&0&0\\1&-2&1&0&0&0&0\\0&1&-2&1&0&0&0\\0&0&1&-2&1&0&0\\0&0&0&1&-2&1&0\\0&0&0&0&1&-2&1\\0&0&0&0&0&1&-2\end{array}\right]$$</p>
+      <p>They all display a common 1, -2, 1 pattern, but you might notice that while this pattern is centered on the diagonal for \(\Delta_-\Delta_+\) and \(\Delta_+\Delta_-\), it is not for \(\Delta_+\Delta_+\) and \(\Delta_-\Delta_-\). These latter two correspond to to</p>
+      <p>$$\frac{f(x+2h)-2f(x+h)+f(x)}{h^2}\hspace{3ex}\text{and}\hspace{3ex}\frac{f(x)-2f(x-h)+f(x-2h)}{h^2}.$$</p>
+      <p>While these are both approximations of \(f''(x)\), they both have \(O(h)\) error. The cenetered version, \(\frac{f(x+h)-2f(x)+f(x-h)}{h^2}\), as seen in \(\Delta_-\Delta_+\) and \(\Delta_+\Delta_-\), has \(O(h^2)\) error. Fundamentally, this is because we have equal contributions for \(f(x + h)\) and \(f(x - h)\); the odd terms of their Taylor series' canel out (as \(h^3 + (-h)^3 = 0\)). You might remember this from our examination of the centered difference earlier.</p>
+      <p>But what do we make of the -1 terms in the corners of \(\Delta_-\Delta_+\) and \(\Delta_+\Delta_-\)? Given that the terms are on the boundries of the matrices, we can think of them as boundry conditions. To elaborate, suppose we have a differential equation \(\frac{d^2u}{dx^2}=f\). We could try solving this by representing \(\frac{d^2}{dx^2}\) as a second finite difference on an interval \([a, b]\). For example</p>
+      <p>$$\frac{1}{h^2}\Delta_+\Delta_-U=F$$<p>
+      <p>where \(U\) is the vectorized representation of our unknown \(u\) and \(F\) of our driving function \(f\). If we assume that \(u(a-h)=0\),</p>
+      <p>$$\frac{u(a+h)-2u(a)+u(a-h)}{h^2}=\frac{u(a+h)-2u(a)}{h^2},$$</p>
+      <p>which corresponds to \(\Delta_+\Delta_-\)'s top-left corner.</p>
+      <p>Conversely, if we assume \(u'(a)=0\), then for sufficiently small \(h)\), \(u(a)\approx u(a-h)\), so</p>
+      <p>$$\frac{u(h+h)-2u(a)+u(a-h)}{h^2} = \frac{u(a+h)-u(a)}{h^2},$$</p>
+      <p>which corresponds to the top left corner of \(\Delta_-\Delta_+\).</p>
+      <p>This means our choice between \(\Delta_-\Delta_+\) and \(\Delta_+\Delta_-\) is not arbitrary, and we might choose neither. Instead we set the top and bottom rows by considering our boundary conditions. Consider, for example, a periodic boundary condition where \(u(a-h)=u(b)\) and \(u(b+h)=u(a)\). Then the appropriate difference to approximate the second derivative would be</p>
+      <p>$$\left[\begin{array}{rr}-2&1&0&0&0&0&1\\1&-2&1&0&0&0&0\\0&1&-2&1&0&0&0\\0&0&1&-2&1&0&0\\0&0&0&1&-2&1&0\\0&0&0&0&1&-2&1\\1&0&0&0&0&1&-2\end{array}\right].$$</p>
+    <h2>An Aside</h2>
+      <p>You might have wondered why we considered only products of \(\Delta_-\) and \(\Delta_+\), neglecting \(\delta_-\) despite its better error margin. This is because products of \(\Delta_0\) are "wider" so to speak. For example</p>
+      <p>$$\Delta_0\Delta_0=\left[\begin{array}{rr}-1&0&1&0&0&0&0\\0&-2&0&1&0&0&0\\1&0&-2&0&1&0&0\\0&1&0&-2&0&1&0\\0&0&1&0&-2&0&1\\0&0&0&1&0&-2&0\\0&0&0&0&1&0&-1\end{array}\right]$$</p>
+       <p>but this is just like our 1, -2, 1 pattern from before, except with a step size of \(2h\) rather than \(h\). Consequently, it still only has a \(O(h^2)\) error, yet now our boundary conditions are affecting the second and penultimate rows as well, which is not something we want under ordinary circumstances.</p>
+       <p>It's even worse for the other products, since \(\Delta_0\Delta_+\), \(\Delta_+\Delta_0\), \(\Delta_0\Delta_-\), \(\Delta_-\Delta_0\) aren't symmetric, and thus don't cancel out the odd ordered terms of their corresponding Taylor expansions, resulting in only \(O(h)\) errors.</p>
+       <p>If, however, we don't mind wider rows, we can get a better approximation of \(\frac{d^2}{dx^2}\) with \(O(h^4)\) error by choosing our coefficients more intelligently. By balancing our \(+h\) and \(-h\) terms, we can eliminate the odd terms of the Taylor series', but to eliminate higher order even terms, we need to introduce additional evaluation points frther from \(x\). For example, the degree 4 term of \(f(x+h)\) is \(\frac{f^{(4)}(x)}{24}h^4\), whereas the degree 4 term of \(f(x+2h)\) is \(\frac{16f^{(4)}(x)}{24}h^4\).</p>
+       <p>Hence \(16f(x+h) - f(x+2h)\) will have no \(4^{th}\) degree term. We add their complements to cancel out the odd dgree terms,</p>
+       <p>$$-f(x+2h)+16f(x+h)+16f(x-h)-f(x-2h),$$</p>
+       <p>and then subtract out the uncancelled copies of \(f(x)\) to elimante the constant term:</p>
+       <p>$$-f(x+2h)+16f(x+h)-30f(x)+16f(x-h)-f(x-2h).$$</p>
+       <p>Of course, I've done nothing to ensure our answer is normalized, so, checking the value of the second order term:</p>
+       <p>$$\left(-\frac{4f''(x)}{2}h^2+16\frac{f''(x)}{2}h^2\right)\times 2\text{ (from the x-h, and x-2h terms)}$$</p>
+       <p>gives \(12h^2f''(x)\), we just divide the whole difference by \(12h^2\) to get the second derivative with \(O(h^4)\) error:</p>
+       <p>$$\frac{-f(x+2h)+16f(x+h)-30f(x)+16f(x-h)-f(x-2h)}{12h^2}=f''(x)+O(h^2).$$</p>
+       <p>If you don't believe me, just expand out the Taylor series and check for yourself.</p>
+       
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   </body>
