@@ -15,6 +15,22 @@ double f(double x) {
     return M_PI_2 * M_PI_2 * std::cos(M_PI_2 * x);
 }
 
+Eigen::SparseMatrix<double>
+top_matrix(int dimension) {
+    Eigen::SparseMatrix<double> out(dimension, dimension);
+    out.reserve(Eigen::VectorXi::Constant(dimension, 3));
+    out.insert(0, 0) = 1;
+    out.insert(1, 0) = -1;
+    for (int col = 1; col < dimension - 1; ++col) {
+        out.insert(col - 1, col) = -1;
+        out.insert(col    , col) =  2;
+        out.insert(col + 1, col) = -1;
+    }
+    out.insert(dimension - 2, dimension - 1) = -1;
+    out.insert(dimension - 1, dimension - 1) =  2;
+    return out;
+}
+
 int main() {
     using namespace Eigen;
     const int n = 100; // The number of points we evaluate at
@@ -22,17 +38,7 @@ int main() {
     const double end = 1;
 
     // Builging the top matrix T
-    SparseMatrix<double> T(n, n);
-    T.reserve(VectorXi::Constant(n, 3));
-    T.insert(0, 0) =  1;
-    T.insert(1, 0) = -1;
-    for (int col = 1; col < n - 1; ++col) {
-        T.insert(col - 1, col) = -1;
-        T.insert(col    , col) =  2;
-        T.insert(col + 1, col) = -1;
-    }
-    T.insert(n - 2, n - 1) = -1;
-    T.insert(n - 1, n - 1) =  2;
+    SparseMatrix<double> T = top_matrix(n);
 
     // Initializing the force vector F
     const double h = (end - start) / (n - 1.0);
