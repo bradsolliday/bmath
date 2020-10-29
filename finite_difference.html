@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Finite Differences</title>
+    <link href="stylesheets/standard.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+
+    <h1>Finite Differences</h1>
+
+    <h2>Taking Derivatives</h2>
+      <p>Suppose we want to numerically take the derivative of a function \(f\), in either functional form or as a list of evenly spaced values. For example, we might have \(f(x) = cos(x)\) and we want to represent is as an array \(F\) of length \(n\) in the range \([0, 1]\), we could define</p>
+      <p>$$\Delta x=\frac{1 - 0}{n - 1}$$</p>
+      <p>and let $$F[k] = f(0 + k\Delta x)\hspace{3ex}\forall k\in\{0,1,\dots,n-1\}.$$</p>
+      <p>Perhaps the most obvious thing to is to just use the definition of the derivative as our model, so, since</p>
+      <p>$$f'(x)=\lim_{h\rightarrow0}\frac{f(x+h)-f(x)}{h},$$ we can define $$F'[i] = \frac{F'[i+1]-F'[i]}{\Delta x}$$</p>
+      <p>Of course, it would have been equally valid to think of \(h\) as a negative value approaching 0. Thinking of it this way, we might write the derivative as</p>
+      <p>$$F'[i] = \frac{F'[i]-F'[i-1]}{\Delta x}$$</p>
+      <p>Graphically, we'd represent this as</p>
+      <img src="images/cos_forward_backward_deriv_approx.png">
+      <p>Where the black curve is a segment of the plot of \(cos(x)\), the dashed red line is the linear approximation of \(cos(x)\) at 0.2 using the "forward" approximation of the derivative, and the dashed blue line is the linear approximation using the "backward" approximation of the derivative.</p>
+      <p>In the image, however, we can see that one approximation overshoots and the other undershoots the true value of the derivative. If we look at the first few terms of the taylor series of \(f\),</p>
+      <p>$$f(x+h) = f(x) + f'(x)h + \frac{f''(x)}{2}h^2 + \dots$$</p>
+      <p>So the leading error in our approximation of \(\frac{f(x+h)-f(x)}{h}\) is \(\frac{f''(x)}{2}h\). This means that, unless we're looking at an inflection point (where \(f''(x)=0\)), the forward and backward approximations will err on opposite ends of the true derivative.</p>
+      <p>This suggests that the average of the two approximations would be better:</p>
+      <p>$$\frac{ \frac{f(x+h)-f(x)}{h} + \frac{f(x)-f(x-h)}{h} }{2} = \frac{f(x+h)-f(x-h)}{2h}.$$</p>
+      <p>Looking at the graphed results, we definitely see a big improvement:</p>
+      <img src="images/cos_forward_backward_centered_deriv_approx.png">
+      <p>Here, the (now dotted) red and blue lines are the same, but now the green lines have the new averaged or "centered" slope, with the dotted green line being the cord connecting \(f(x-h)\) and \(f(x+h)\), and the dashed green line being the same cord translated to intersect \((x, f(x))\).</p>
+      <p>We can get a more rigorous explanation for this improvement by looking at the Taylor series of this new approximation:</p>
+      <p>$$\begin{align*} f(x+h) - f(x-h) &= f(x) + f'(x)h + \frac{f''(x)}{2}h^2 + \frac{f'''(x)}{6}h^3 +\dots\\ &- f(x) + f'(x)h - \frac{f''(x)}{2}h^2 + \frac{f'''(x)}{6}h^3 - \dots\\ &= 2f'(x)h + \frac{f'''(x)}{3}h^3 + \dots\end{align*}$$</p>
+      <p>So $$\frac{f(x+h) - f(x-h)}{2h} = f'(x) + \frac{f'''(x)}{6}h^2 + \dots$$</p>
+      <p>Now, our error is \(O(h^2)\) (rather than \(O(h)\)), which is a good improvement! So it's better to approximate our derivative as</p>
+      <p>$$F'[i] = \frac{F[i + 1] - F[i - 1]}{2h}$$</p>
+      <p>than as a simple forward or backward approximation.</p>
+
+    <h2>Matrix Representation</h2>
+      <p>It'll be convenient at this point to note that we can represent these finite difference approximations of the derivative as a matrix. This should almost be expected, considering differentiation is a linear operator and how all linear functions on finite vector spaces can be represented as matrices.</p>
+      <p>By considering its action, the forward difference \(f(x+h)-f(x)\) can be represented by the nxn matrix (with n = 7 here)</p>
+      <p>$$\Delta_+ \equiv \left[\begin{array}{rr}-1&1&0&0&0&0&0\\0&-1&1&0&0&0&0\\0&0&-1&1&0&0&0\\0&0&0&-1&1&0&0\\0&0&0&0&-1&1&0\\0&0&0&0&0&-1&1\\0&0&0&0&0&0&-1\end{array}\right],$$</p>
+      <p>the backward difference \(f(x)-f(x-h)\) as</p>
+      <p>$$\Delta_- \equiv \left[\begin{array}{rr}1&0&0&0&0&0&0\\-1&1&0&0&0&0&0\\0&-1&1&0&0&0&0\\0&0&-1&1&0&0&0\\0&0&0&-1&1&0&0\\0&0&0&0&-1&1&0\\0&0&0&0&0&-1&1\end{array}\right],$$</p>
+      <p>and the centered difference \(f(x+h) - f(x-h)\) as</p>
+      <p>$$\Delta_0 \equiv \left[\begin{array}{rr}0&1&0&0&0&0&0\\-1&0&1&0&0&0&0\\0&-1&0&1&0&0&0\\0&0&-1&0&1&0&0\\0&0&0&-1&0&1&0\\0&0&0&0&-1&0&1\\0&0&0&0&0&-1&0\end{array}\right],$$</p>
+      <p>where we divide by the appropriate spacing (\(\frac1h\Delta_-\), \(\frac1h\Delta_+\), \(\frac1{2h}\Delta_0\)) to use it as a derivative.</p>
+      <p>You might have noticed that the bottom row of \(\Delta_+\) and the top row of \(\Delta_-\) don't fit the pattern set by the rest of the rows. If you're worried this is an artifact of our matrix representation, worry not as these anomalies were present in our algebraic representation as well. For example, what value do you use for \(f(x-h)\) when we only have defined \(f\) on values greater than x?</p>
+      <p>We can still consider the implications though. By simply truncating the matrices at some finite size, we are implicity assuming that \(f(x)=0\) outside of our interval.<p>
+
+    <h2>Second Derivatives</h2>
+      <p>Of course, if we are approximating our derivatives as finite differences which can be represented as matrices, it's easy to consider how we might take a second derivative. Just apply our finite differences twice!</p>
+      <p>But which ones? We get difference answers depending on our order:</p>
+      <p>$$\Delta_+\Delta_+ = \left[\begin{array}{rr}1&-2&1&0&0&0&0\\0&1&-2&1&0&0&0\\0&0&1&-2&1&0&0\\0&0&0&1&-2&1&0\\0&0&0&0&1&-2&1\\0&0&0&0&0&1&-2\\0&0&0&0&0&0&1\end{array}\right]$$</p>
+      <p>$$\Delta_-\Delta_- = \left[\begin{array}{rr}1&0&0&0&0&0&0\\-2&1&0&0&0&0&0\\1&-2&1&0&0&0&0\\0&1&-2&1&0&0&0\\0&0&1&-2&1&0&0\\0&0&0&1&-2&1&0\\0&0&0&0&1&-2&1\end{array}\right]$$</p>
+      <p>$$\Delta_+\Delta_- = \left[\begin{array}{rr}-2&1&0&0&0&0&0\\1&-2&1&0&0&0&0\\0&1&-2&1&0&0&0\\0&0&1&-2&1&0&0\\0&0&0&1&-2&1&0\\0&0&0&0&1&-2&1\\0&0&0&0&0&1&-1\end{array}\right]$$</p>
+      <p>$$\Delta_-\Delta_+ = \left[\begin{array}{rr}-1&1&0&0&0&0&0\\1&-2&1&0&0&0&0\\0&1&-2&1&0&0&0\\0&0&1&-2&1&0&0\\0&0&0&1&-2&1&0\\0&0&0&0&1&-2&1\\0&0&0&0&0&1&-2\end{array}\right]$$</p>
+      <p>They all display a common 1, -2, 1 pattern, but you might notice that while this pattern is centered on the diagonal for \(\Delta_-\Delta_+\) and \(\Delta_+\Delta_-\), it is not for \(\Delta_+\Delta_+\) and \(\Delta_-\Delta_-\). These latter two correspond to to</p>
+      <p>$$\frac{f(x+2h)-2f(x+h)+f(x)}{h^2}\hspace{3ex}\text{and}\hspace{3ex}\frac{f(x)-2f(x-h)+f(x-2h)}{h^2}.$$</p>
+      <p>While these are both approximations of \(f''(x)\), they both have \(O(h)\) error. The cenetered version, \(\frac{f(x+h)-2f(x)+f(x-h)}{h^2}\), as seen in \(\Delta_-\Delta_+\) and \(\Delta_+\Delta_-\), has \(O(h^2)\) error. Fundamentally, this is because we have equal contributions for \(f(x + h)\) and \(f(x - h)\); the odd terms of their Taylor series' canel out (as \(h^3 + (-h)^3 = 0\)). You might remember this from our examination of the centered difference earlier.</p>
+      <p>But what do we make of the -1 terms in the corners of \(\Delta_-\Delta_+\) and \(\Delta_+\Delta_-\)? Given that the terms are on the boundries of the matrices, we can think of them as boundry conditions. To elaborate, suppose we have a differential equation \(\frac{d^2u}{dx^2}=f\). We could try solving this by representing \(\frac{d^2}{dx^2}\) as a second finite difference on an interval \([a, b]\). For example</p>
+      <p>$$\frac{1}{h^2}\Delta_+\Delta_-U=F$$<p>
+      <p>where \(U\) is the vectorized representation of our unknown \(u\) and \(F\) of our driving function \(f\). If we assume that \(u(a-h)=0\),</p>
+      <p>$$\frac{u(a+h)-2u(a)+u(a-h)}{h^2}=\frac{u(a+h)-2u(a)}{h^2},$$</p>
+      <p>which corresponds to \(\Delta_+\Delta_-\)'s top-left corner.</p>
+      <p>Conversely, if we assume \(u'(a)=0\), then for sufficiently small \(h)\), \(u(a)\approx u(a-h)\), so</p>
+      <p>$$\frac{u(h+h)-2u(a)+u(a-h)}{h^2} = \frac{u(a+h)-u(a)}{h^2},$$</p>
+      <p>which corresponds to the top left corner of \(\Delta_-\Delta_+\).</p>
+      <p>This means our choice between \(\Delta_-\Delta_+\) and \(\Delta_+\Delta_-\) is not arbitrary, and we might choose neither. Instead we set the top and bottom rows by considering our boundary conditions. Consider, for example, a periodic boundary condition where \(u(a-h)=u(b)\) and \(u(b+h)=u(a)\). Then the appropriate difference to approximate the second derivative would be</p>
+      <p>$$\left[\begin{array}{rr}-2&1&0&0&0&0&1\\1&-2&1&0&0&0&0\\0&1&-2&1&0&0&0\\0&0&1&-2&1&0&0\\0&0&0&1&-2&1&0\\0&0&0&0&1&-2&1\\1&0&0&0&0&1&-2\end{array}\right].$$</p>
+    <h2>An Aside</h2>
+      <p>You might have wondered why we considered only products of \(\Delta_-\) and \(\Delta_+\), neglecting \(\Delta_0\) despite its better error margin. This is because products of \(\Delta_0\) are "wider" so to speak. For example</p>
+      <p>$$\Delta_0\Delta_0=\left[\begin{array}{rr}-1&0&1&0&0&0&0\\0&-2&0&1&0&0&0\\1&0&-2&0&1&0&0\\0&1&0&-2&0&1&0\\0&0&1&0&-2&0&1\\0&0&0&1&0&-2&0\\0&0&0&0&1&0&-1\end{array}\right].$$</p>
+      <p>This is just like our 1, -2, 1 pattern from before, except with a step size of \(2h\) rather than \(h\). Consequently, it still only has a \(O(h^2)\) error, yet now our boundary conditions are affecting the second and penultimate rows as well, which is not something we want under ordinary circumstances.</p>
+      <p>It's even worse for the other products, since \(\Delta_0\Delta_+\), \(\Delta_+\Delta_0\), \(\Delta_0\Delta_-\), \(\Delta_-\Delta_0\) aren't symmetric, and thus don't cancel out the odd ordered terms of their corresponding Taylor expansions, resulting in only \(O(h)\) errors.</p>
+      <p>If, however, we don't mind wider rows, we can get a better approximation of \(\frac{d^2}{dx^2}\) with \(O(h^4)\) error by choosing our coefficients more intelligently. By balancing our \(+h\) and \(-h\) terms, we can eliminate the odd terms of the Taylor series, but to eliminate higher order even terms, we need to introduce additional evaluation points further from \(x\). For example, the degree 4 term of \(f(x+h)\) is \(\frac{f^{(4)}(x)}{24}h^4\), whereas the degree 4 term of \(f(x+2h)\) is \(\frac{16f^{(4)}(x)}{24}h^4\).</p>
+      <p>Hence \(16f(x+h) - f(x+2h)\) will have no \(4^{th}\) degree term. We add their complements to cancel out the odd degree terms,</p>
+      <p>$$-f(x+2h)+16f(x+h)+16f(x-h)-f(x-2h),$$</p>
+      <p>and then subtract out the uncancelled copies of \(f(x)\) to elimante the constant term:</p>
+      <p>$$-f(x+2h)+16f(x+h)-30f(x)+16f(x-h)-f(x-2h).$$</p>
+      <p>Of course, I've done nothing to ensure our answer is normalized, so, checking the value of the second order term:</p>
+       <p>$$\left(-\frac{4f''(x)}{2}h^2+16\frac{f''(x)}{2}h^2\right)\times 2\text{ (from the x-h, and x-2h terms)}$$</p>
+       <p>gives \(12h^2f''(x)\), we just divide the whole difference by \(12h^2\) to get the second derivative with \(O(h^4)\) error:</p>
+      <p>$$\frac{-f(x+2h)+16f(x+h)-30f(x)+16f(x-h)-f(x-2h)}{12h^2}=f''(x)+O(h^2).$$</p>
+      <p>If you don't believe me, just expand out the Taylor series and check for yourself.</p>
+
+    <h2>Solving an Equation</h2>
+      <p>Let's take a look at finite differences in action. We'll solve a differential equation whose analytical solution we know, both so we can confirm our solution and so it will be easier to explore the effects of our boundary conditions. Namely, let's solve for \(u\) in</p>
+      <p>$$-\frac{d^2u}{dx^2}(x)=\left(\frac\pi2\right)^2\cos\left(\frac\pi2x\right)$$</p>
+      <p>with boundary conditions \(u'(0)=0\), \(u(1)=0\). Ignoring the boundary conditions, the most general solution to this equation if \(\cos\left(\frac\pi2x\right)+Ax+b\). The boundary conditions for both \(A\) and \(B\) to be 0. So our analytical solution is \(\cos\left(\frac\pi2x\right)\).</p>
+      <p>The most straight forward thing to do, if we wish to evaluate our approximation at n points, is to evenly space our approximation points on \([0, 1]\) with a spacing of \(h=\frac1{n-1}\), then approximate \(-u''(x)\) as \(\frac{-u(x-h) + 2u(x) - u(x+h)}{h^2}\).</p>
+      <p>Recallling that our discretization forces us to pick our boundary conditions at this stage, we choose the top left corner to be 1 and the bottom right to be 2 since \(u'\) is 0 on the left and \(u\) is 0 on the right. This corresponds to \(-\Delta_-\Delta_+\) from our previous discussion, but we'll denote it as \(T\) (for top, since the top row has a 1 on the diagonal rather than a 2):</p>
+      <p>$$-\frac{d^2}{dx^2} \sim T = \left[\begin{array}{rr}1&-1&0&0&0&0&0\\-1&2&-1&0&0&0&0\\0&-1&2&-1&0&0&0\\0&0&-1&2&-1&0&0\\0&0&0&-1&2&-1&0\\0&0&0&0&-1&2&-1\\0&0&0&0&0&-1&2\end{array}\right].$$</p>
+      <p>Note, \(T\) is an nxn matrix, yet only has \(3n-2\) non-zero entries. If n is reasonably large, it's important to represent \(T\) in your software as a sparse matrix so as to save on the cost of storing, accessing, and operating on values we already know to be zero.</p>
+      <p>If we represent \(\left(\frac\pi2\right)^2\cos\left(\frac\pi2x\right)\) (which I'll simply denote by \(f\) going forward) as the vector \(F\), where \(F[i] = f(ih)\), and let the vector \(U\) be our approximation of \(u\), then our discretized equation becomes</p>
+      <p>$$\frac1{h^2}TU=F$$</p>
+      <p>We know this equation is always solvable because \(T\) is invertible. To see that it is, note that</p>
+      <p>$$\det(T)=\det(-\Delta_-\Delta_+)=\det(\Delta_-)\det(-\Delta_+).$$</p>
+      <p>\(\Delta_-\) and \(-\Delta_+\) are easy to take the determinant of because there is only one traversal of their rows and columns with no repeats which doesn't intersect any zeros, and that is just the ones on the diagonal, so each plainly has a determinant of 1. Thus \(\det(T)=1\), i.e., \(T\) is invertible.</p>
+      <p>Of course, to solve \(TU=F\) (we can drop the \(1/h^2\) when we solve and just multiply our final answer by \(h^2\) at the end), we don't compute \(T\) inverse. It's cheaper to instead use a technique like LU decomposition and to then solve for \(U\) by forward and backward substitution.</p>
+      <p>The following discussion just explains why \(T\) meets the conditions for Cholesky decomposition and can be <a href="finite_difference.html#digression_end"> skipped.</a></p>
+      <h3>Conditions for Cholesky Decomposition</h3>
+      <p>If, however, \(T\) is symmetric and positive definite, we can use Cholesky decomposition, which is an even cheaper way of solving for \(U\). Obviously \(T\) is symmetric, but is it positive semidefinite?</p>
+      <p>Plausibly. It's symmetric, so if all its eigenvalues are positive it is positive definite. Note, this follows because, by the real spectral theorem, we can find an orthonormal basis of eigenvectors for real symmetric matrices. Let \(\{e_i\}\) be such a basis with positive eigenvalues \(\lambda_i\in\mathbb{R}\). If \(x\in\mathbb{R}^n\) is a nonzero vector, \(\exists\alpha_i\in\mathbb{R}\) not all zero s.t. \(x=\sum_{i}\alpha_i e_i\), and so</p>
+      <p>$$\begin{align*}x^\top Tx&=\left(\sum_i\alpha_i e_i\right)^\top T\left(\sum_j\alpha_j e_j\right)\\ &=\sum_{i,j}\alpha_i\alpha_j e_i^\top Te_j\\ &=\sum_{i,j}\alpha_i\alpha_je_i^\top\lambda_je_j\\ &= \sum_i\alpha_i^2\lambda_i > 0\end{align*},$$</p>
+      <p>implying \(T\) is positive definite.</p>
+      <p>So, does \(T\) have positive eigenvalues? Turns out it does, and we can easily see this by applying the Gershgorin Circle Theorem.</p>
+      <p>Before stating the theorem, I think it would be helpful to explain the idea. Suppose we have a matrix \(A\) whose eigenvalues we'd like to know. If \(A\) were diagonal (or triangular), we'd be able to just read off the eigenvalues from the diagonal. But assume we don't have that luxury. Suppose, however, that \(A\) were almost diagonal, i.e., the off-diagonal elements are small relative to the diagonal element on their same row. One might think that since the matrix is almost diagonal (except for a relatively small perturbation), its eigenvalues can't be too far from the diagonal entries.</p>     
+      <p>After all, suppose \(v\) were an eigenvector with some largest element \(v_i\). If the diagonal \(A_{ii}\) dominates in absolute value the other elements of the \(i^{th}\) row, the action of \(A\) on \(v\) at the \(i^{th}\) entry will be dominated by the product \(A_{ii}v_i\). Since \(v\) is an eigenvector with some eigenvalue \(\lambda\), we know the action of \(A\) on \(v_i\) is just \(\lambda v_i\). This means that if \(A_{ii}\) is large compared to the rest of its row, then \(\lambda\) should be close in value to \(A_{ii}\).</p>
+      <p>Of course, we don't actually know which component of an unknown eigenvector is largest, so all we can really say is that \(\lambda\) is close to at least one of the diagonals, with the range determined on a row by row basis by the sizes of the other entries.</p>
+      <p>With that out of the way, let's dicuss the theorem:</p>
+      <p><b>Theorem:</b> Let \(A\) be an nxn complex matrix. Let \(R_i=\sum_{j\neq i}|A_{ij}|\). If \(\lambda\) is an eigenvalue of \(A\), then \(|\lambda-A_{ii}|\leq R_i\) for some \(i\in\{1,\dots,n\}\).</p>
+      <p><b>Proof:</b> Let \(v\) be an eigenvector of \(A\) whose eigenvalue if \(\lambda\). Let \(v_i\) be the component of \(v\) with largest absolute value so that \(|v_j|\leq |v_i|\hspace{1ex}\forall j\). Note, \(v_i\neq0\), as if it were zero, that would imply that \(v=0\), contradicting our assumption that \(v\) is an eigenvector.</p>
+      <p>Now, $$\lambda v_i=(Av)_i=\sum_{j=1}^nA_{ij}v_j\text{, so}\hspace{3ex}\lambda-A_{ii}=\frac1{v_i}\sum_{j\neq i}A_{ij}v_j,$$</p>
+      <p>so $$|\lambda - A_{ii}| = \frac1{|v_i|}\left|\sum_{j\neq i}A_{ij}v_j\right|\leq\frac1{|v_i|}\sum_{j\neq i}|A_{ij}||v_j|\leq\frac1{|v_i|}\sum_{j\neq i}|A_{ij}||v_i|=\sum_{j\neq i}|A_{ij}|=R_i,$$</p>
+      <p>as claimed. \(\blacksquare\)</p>
+      <p>The reason this is now useful is, looking at \(T\), we see this then implies all eigenvalues are in the interval \([0, 4]\). However, since \(T\) is invertible, none of its eigenvalues are 0, and so we know \(T\)'s eigenvalues are in the interval \((0, 4]\), i.e., are all positive. Hence \(T\) is positive definite and we can use Cholesky decomposition</p>
+      <p><b>End of digression</b></p>
+      <a name="digression_end">
+
+      <p>Anyway, solving for \(U\) and plotting the results (with our dimension \(n=10\)), we get </p>
+      <img src="images/fd_n10_bad_boundaries.png">
+      <p>The black solid line is the exact solution, while our approximated solution is given by the red crosses.</p>
+      <p>Clearly, something has gone wrong! While the general shape is right, it is too high!</p>
+      <p>Of course, herein lies the clue. The shape is determined by the differential equations. Since that looks right, it must be our boundary conditions which are problematic.</p>
+      <p>The more obviously troublesome boundary condition is at 1, where our solution should be intersecting the x axis. So let's examine how we represent out boundary condition here: by truncating the matrix, losing the last row's second -1, we are implicitly assuming</p>
+      <p>$$\frac{u(1-h)-2u(h)+u(1+h)}{h^2}=\frac{u(1-h)-2u(h)}{h^2},$$</p>
+      <p>i.e., that \(0=u(1+h)=u(1)+u'(1)h+O(h^2)\), i.e., to first order, \(u(1)=-u'(1)h\). Knowing that for the exact solution, \(u'(1)=-\frac\pi2\cos\left(\frac\pi2\right)=-\frac\pi2\), the elevated value on the right is well explained by this error. Now, while this becomes our desired boundary condition in the limit as \(h\rightarrow 0\), this is not quite what we want. We can resolve this, however, by changing the range on which we evaluate \(U\) from \([0, 1]\) to \([0, 1-h]\), so that our truncation matches our boundary condition exactly. To do this, we still set our start at 0, but we want our step size \(h\) to be such that</p>
+      <p>$$1-h=(n-1)h\text{,}\hspace{3ex}\text{i.e.,}\hspace{3ex}h=\frac1n.$$</p>
+      <p>When we substitue this new spacing (both for plotting and defining \(F[i]=f(ih)\)), we get</p>
+      <img src="images/fd_n10_fix_bound_at_1.png">
+      <p>Much better! But evidently we didn't handle our boundary condition at 0 well either. So let's give it the same treatement and see what we implicitly assumed in the form of \(T\):</p>
+      <p>$$\frac{u(-h)-2u(0)+u(h)}{h^2}=\frac{-u(0)+u(h)}{h^2},$$</p>
+      <p>i.e., that $$u(0)=u(-h).$$</p>
+      <p>While this isn't as straight forward of a situation as our other boundary condition, we can still handle it. This statement is only true insofar as \(u'(0)=\frac{u(0)-u(-h)}{h}\). But, in reality</p>
+      <p>$$\frac{u(0)-u(-h)}h = u'(0) + \frac{u''(0)}{2}h + O(h^2).$$</p>
+      <p>So, saying \(u(0)=u(-h)\) is not saying that \(u'(0)=0\), but rather that $$u'(0) = \frac{u''(0)}{2}h.$$</p>
+      <p>This checks out as substituting in our known value for \(u''(0)\) (knowing that \(-u''(x)=(\pi/2)^2\cos\left(\frac\pi2x\right)\)), we get that our effective boundary condition is</p>
+      <p>$$u'(0)=\frac{u''(0)}{2}h=-\frac{\pi^2}{8}h,$$</p>
+      <p>implying we have a negative slope at 0, which is, in fact, what we see.</p>
+      <p>Now, while this approximation of the boundary condition is good in the limit as \(h\rightarrow 0\), it's evidently causing us problems and we can do better.</p>
+      <p>Namely, recall that the centered difference is a better approximation of the derivative than the backward difference. So suppose instead that we implicitly assumed</p>
+      <p>$$0=\frac{u(h/2)-u(-h/2)}h = u'(0) + \frac{u'''(0)}{24}h^2 + O(h^4).$$</p>
+      <p>This is instead saying that, to lowest order, $$u'(0)=-\frac{u'''(0)}{24}h^2,$$</p>
+      <p>which is a much better approximation of 0 for small enough \(h\)!</p>
+      <p>To check that this actually helps, we redo our interval to now start not at 0 but at \(\frac h2\), so that</p>
+      <p>$$1-h-\frac h2 = (n-1)h\text{,}\hspace{3ex}\text{i.e.,}\hspace{4ex}h=\frac1{n+\frac12}.$$</p>
+      <p>Using this new value for plotting and calculating \(F\) (\(F[i]=f(h/2 + ih)\), we instead get</p>
+      <img src="images/fd_n10_good_boundaries.png">
+      <p>which is so good we can't even see the error at this level of zoom!</p>
+      <p>Note, while we saw that both of our naive boundary condition implementations were good in the limit as \(h\rightarrow 0\), which is in fact what we see below (\(n=300\)):</p>
+      <img src="images/fd_n300_bad_boundaries.png">
+      <p>the approximation is still visibly worse (particularly between 0 and .2) with 300 points than our adjusted solution was with 10 points. Note, for this figure I plotted the data as a dotted line rather than as individual points. Also, while for larger values of \(n\) the approximated solution is indistinguishable from the exact solution, I chose \(n=300\) to illustrate that not even 30 times the number of points is sufficient to match the improved implementation.</p>
+      <p>Note also that our improvements were made on the basis of considering \(u\)'s generic Taylor series, and so our improvements should also be effective in the general case as well.</p>
+      <p>This exericse has shown that by just putting in a little extra care into how we set our boundary conditions, we can get much better approximations much more quickly.</p>
+
+      <p>The C++ code to solve for \(U\) can be found <a href="https://github.com/bradsolliday/bmath/blob/master/finite_difference/finite_difference_1.cpp">here</a>. Note, because of the matplotlib-cpp dependency, which uses Python to plot the figures, it would be some work to get the code to compiler on your machine. The linear algebra library used is Eigen.</p>
+       
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </body>
+</html>

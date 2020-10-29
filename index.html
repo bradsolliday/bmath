@@ -40,6 +40,12 @@
         </div>
       </div>
 
+      <h2>Discussion of Finite Differences</h2>
+      <p><a href="finite_difference.html">Here</a> you can find a discussion of approximating the derivative of a function represented as an array of evaluated points.</p>
+      <p>To skip to the part where I start plotting solutions to a differential equation, click <a href="finite_difference.html#digression_end">here</a>. If you scroll down you'll see how the solution is improved by making successing modifications to the way the boundary conditions are implemented.</p>
+      <p><a href="https://github.com/bradsolliday/bmath/blob/master/finite_difference/finite_difference_1.cpp">Here</a> is the C++ code used to solve the differential equation and plot the results. Note, plotting is done with python2.7 via matplotlib-cpp, so if you wish to compile the code yourself, you'll have to download and link whatever dependecies your compiler demands.</p>
+      <img src="images/fd_n10_good_boundaries.png">
+
       <h2>Calculating Prime Numbers</h2>
       <p>Below is a demo of a method of calculating prime numbers based on the Sieve of Eratosthenes, but modified to allow the calculation of arbitrarily large prime numbers. See the documentation for the implementation <strong><a href="./doc/bmath/struct.PCache.html">here</a></strong> (note, the code is written in Rust).</p>
       <p>Beware, I haven't yet gotten around to setting the code to run in the background, so if it takes a moment to calculate the first 1 million primes, think twice before adding another zero as the user interface will freeze until the calculation is complete (you can always close and reopen the page of course).</p>
