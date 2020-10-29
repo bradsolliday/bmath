@@ -18,7 +18,7 @@ double f(double x) {
 // Returns a sparse Top matrix (second difference matrix with
 // u'' = 0 boundary condition on the top and u = 0 boundary condition
 // on the bottom, where u is the function we are differentiating. The
-// matrix is off the form)
+// matrix is of the form)
 // [  1 -1  0  0  0 ]
 // [ -1  2 -1  0  0 ]
 // [  0 -1  2 -1  0 ]
@@ -108,10 +108,10 @@ int main() {
     const double start = 0;
     const double end = 1;
 
-    // Building the top matrix T
+    // T represents the second derivative operator (times -1)
     const SparseMatrix<double> T = top_matrix(n);
 
-    // Initializing the force vector F
+    // Initializing the force vector F (RHS of diff. eq.)
     const double h = (end - start) / (n + 0.5);
     const VectorXd F = force_vector(start + h/2, h, n);
 
@@ -122,6 +122,8 @@ int main() {
         std::cout << "The solver failed at computing T\n";
         return 1;
     }
+    // U is our solution to the unknown function we're solving for.
+    // multiplied by h^2 because derivative is T/h^2
     const VectorXd U = h * h * solver.solve(F);
     if (solver.info() != Success) {
         std::cout << "The solver failed at computing U\n";

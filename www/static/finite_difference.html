@@ -152,6 +152,8 @@
       <p>the approximation is still visibly worse (particularly between 0 and .2) with 300 points than our adjusted solution was with 10 points. Note, for this figure I plotted the data as a dotted line rather than as individual points. Also, while for larger values of \(n\) the approximated solution is indistinguishable from the exact solution, I chose \(n=300\) to illustrate that not even 30 times the number of points is sufficient to match the improved implementation.</p>
       <p>Note also that our improvements were made on the basis of considering \(u\)'s generic Taylor series, and so our improvements should also be effective in the general case as well.</p>
       <p>This exericse has shown that by just putting in a little extra care into how we set our boundary conditions, we can get much better approximations much more quickly.</p>
+
+      <p>The C++ code to solve for \(U\) can be found <a href="https://github.com/bradsolliday/bmath/blob/master/finite_difference/finite_difference_1.cpp">here</a>. Note, because of the matplotlib-cpp dependency, which uses Python to plot the figures, it would be some work to get the code to compiler on your machine. The linear algebra library used is Eigen.</p>
        
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
