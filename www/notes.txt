@@ -1,0 +1,10 @@
+Since I invariably forget what I need to do in order to update the website, I'm
+writing my notes on the process here.
+
+First, if some time has passed, important programs (for example, rimraf) may
+have been deleted. If that's happened, in this directory (www), run
+[npm install]
+
+To then get the dev server up and running, run [npm run start]
+For an exmplanation of the npm run commands (to see what they are an alias
+for), the commands are defined in the package.json file under scripts.

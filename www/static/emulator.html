@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Euclid Emulator</title>
+    <link href="stylesheets/standard.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <h1>Euclid Emulator</h1>
+
+    <h2>The Idea of The Algorithm</h2>
+    <p>
+        In the summer of 2020 I had just cracked open Donald E. Knuth's <i>
+            The Art of Computer Programming Vol. 1
+        </i> for the first time. I didn't get
+        very far before something he said caught my attention and had me
+        distracted. Namely, he started tossing out ideas for how one might
+        rigorously define an algorithm.
+    </p>
+    <p>
+        The example he used was to define an algorithm as a quadruple
+        \((Q,I,\Omega,f)\), where Q is a set (representing the set of states
+        our data could take on), I is a subset of Q (representing the set of
+        initial states), \(\Omega\) is another subset of Q (representing the
+        set of terminal states, and thus the output of the algorithm), and f
+        is a function \(f:Q\rightarrow Q\) s.t. f is the identity on
+        \(\Omega\) (representing the process of the algorithm).
+    </p>
+    <p>
+        The idea is to pick an initial state in I and repeatedly
+        apply f to get a new state until our new state is an element of
+        \(\Omega\). Then the algorithm is done.
+    </p>
+    <p>
+        This seems simple and reasonable enough of a model for algorithms, but
+        Knuth quickly pointed out that this definition allows Q to contain
+        states that can't be discerned in a finite amount of time, like an
+        infinite sequence (for example, if someone starts giving you a decimal
+        expansion that for the first 1,000,000 digits is equal to that of
+        \(\pi\), how do you know the number you have is actually equal to
+        \(\pi\) and isn't some other real number quite close to it?).
+    </p>
+    <p>
+        In other words, this does not meet Knuth's standard of
+        <i>effectiveness</i>
+        , which requires that all the operations must be sufficiently basic
+        that a person could in principle be done by a person with pencil and
+        paper in a finite amount of time. To address this, he suggests a
+        restriction on the quadruple.
+    </p>
+    <p>
+        Namely, let A (for alphabet) be a finite set of letters, A* be the set
+        of all strings of letters in A (i.e., all finite ordered sequences of
+        elements of A, including the empty sequence).
+    </p>
+    <p>
+        To create our new quadruple, we're going to imagine a set of N rules
+        which tell you how to modify a string in A*. Our set of states Q is
+        then the set of pairs \((\sigma,j\)), where \(\sigma\) is a string in
+        A* and j is the number of one of our rules (an integer in [0, N)), or
+        N itself. The
+        idea being that our set of states Q is the set of strings coupled with
+        the next rule to apply (or possibly the ruleless number N, but well get
+        to that).
+    </p>
+    <p>
+        The set of initial states, I, is then then the states of the form
+        \((\sigma,0)\), i.e., any string coupled with the initial rule to
+        apply, rule 0. Conversely, the set of final states, \(\sigma\),
+        is the set of states of the form \((\sigma,N)\). It's ok that N
+        doesn't correspond to a rule as we don't need to act on terminal
+        states.
+    </p>
+    <p>
+        In short, our rules tell us what f does to our states (both how the
+        string is modified and what rule to apply next). In order to elaborate,
+        I'll need to first supply some of Knuth's notation: If \(\theta\) and
+        \(\sigma\) are strings in A*, we say that \(\theta\) occurs in
+        \(\sigma\) if \(\sigma\) has the form \(\alpha\theta\omega\) for
+        strings \(\alpha\theta\omega\).
+    </p>
+    <p>
+        The \(j^{th}\) rule is then a string \(\theta_j\) we are seeking, a
+        string \(\phi_j\) we'll use as a replacement for \(\theta\) if it can
+        be found, the number \(p_j\) of the next rule to apply if \(\theta_j\)
+        is present, and the number \(n_j\) of the next rule to apply if
+        \(\theta_j\) is not present.
+    </p>
+    <p>
+        The last component of our quadruple, the function f, is then defined
+        by applying the rule of a state to that state:<br />
+        If \(\theta_j\) does not occur in \(\sigma\):
+        $$f(\sigma,j) = (\sigma, n_j)$$
+        If \(\theta_j\) does occur in \(\sigma\):
+        $$f(\sigma,j) = (\alpha\phi_j\omega, p_j)$$
+        where \(\alpha\) is the shortest string such that
+        &emsp;\(\alpha\theta_j\omega=\sigma\).<br />
+        If j does not correspond to a rule, i.e., is N and our state is a
+        terminal state:
+        $$f(\sigma, N) = (\sigma, N)$$
+    </p>
+    <p>
+        Now, I don't know about you, but I found this to be quite a strange
+        sort of algorithm. After finishing his description, Knuth simply
+        asserted that the method is powerful enough to do anything we can do by
+        hand.
+    </p>
+    <p>
+        Feeling unsatisfied, I decided I wanted to see an actual example of
+        such an algorithm; and, having just learned about Euclid's algorithm
+        for calculating greatest common divisors (see
+        <a href="weblog/euclid_algorithm_page.html">here</a>), I decided to
+        calculate gcd's using this method.
+    </p>
+    <p>
+        To make a long story shorter, I came up with a solution, but it was more
+        complicated and less efficient than needed because I didn't realize
+        empty strings are allowed. Luckily, later in the process I realized
+        to come up with such a ruleset was one of the problems for the section
+        with a solution provided at the end of the book. This solution was
+        essentially the same as my solution, except made use of this trick to
+        greatrly reduce the number of steps needed by the algorithm. I'll use
+        Knuth's solution going forward.
+    </p>
+    <p>
+        The rules are hard to make sense of on their own, so I'll explain the
+        idea of it first. Like Euclid's algorithm, this algorithm is recursive
+        and replaces a pair of numbers with a smaller pair of numbers whose gcd
+        is the same. Since each step reduces the size of our numbers,
+        eventually one of the numbers becomes 1, and the gcd is just the other
+        number.
+    </p>
+    <p>
+        However, unlike Euclid's algorithm, rather than dividing and taking the
+        remainder, we simply use subtraction, and note that if m > n, then
+        gcd(m, n) = gcd(m - n, n) (a divisor of m and n is also a divisor of
+        m-n and n, so the largest divisor of one pair is also the largest
+        divisor of the other).
+    </p>
+    <p>
+        With the high level strategy established, we can emulate this with
+        strings as follows: we initially represent the pair (m, n) that we
+        wish to take the gcd of as m a's follwed by n b's. We can subtract
+        the smaller from the larger by replacing an occurence of "ab" with
+        the empty string "", and then immediately replacing the first occurence
+        of the empty string "" with "c" (which is to simply append a "c" to the
+        front; this is the improvement of Knuth's method upon mine).
+    </p>
+    <p>
+        <b>Example:</b><br />
+        &emsp;aaaaabbbb -> ccccaa <i>or</i><br />
+        &emsp;aaaabbbbb -> ccccbb
+    </p>
+    <p>
+        If we repeat these two steps until we can no longer, we will have no
+        more remaining a's [or b's], have m [n] c's at the start of the string
+        followed by n-m [m-n] b's [a's]. Now, we can return our string to a
+        form similar to our initial state by replacing all a's with b's, and
+        then all c's with a's.
+    </p>
+    <p>
+        <b>Example:</b><br />
+        &emsp;ccccaa -> ccccbb -> aaaabb <i>or</i><br />
+        &emsp;ccccbb -> ccccbb -> aaaabb
+    </p>
+    <p>
+        Since after this cycle, the gcd of the number of a's and the number of
+        b's will remain the same (and either the number of a's or b's has
+        decreased), eventually either the number of a's or the number of b's
+        will equal the gcd(m, n). It will also consequently be a divisor of
+        the other number, and after enough subtractions, there will be the same
+        number of a's and b's (both equal to the gcd), and on a final
+        subtraction, we'll be left with the same number of c's , which will then
+        turn into that many a's.
+    </p>
+    <p>
+        <b>Example:</b><br />
+        &emsp;aaaabb -full-cycle-> aabb -> cc -> cc -> aa
+    </p>
+    <p>
+        We can thus guarentee that after repeating the cycle enough, we'll be
+        left with a number of a's equal to the gcd of m and n. Thus, to check
+        if the algorithm should be finished, we just search for a "b". If we can
+        find one, we know to subtract again. If we can't, we terminate the
+        algorithm and mark down the number of a's as our answer.
+    </p>
+    <p>
+        Now, with the idea of the method described, it should hopefully be
+        easier to make sense of precise description.
+    </p>
+    <p>
+        The alphabet is A = {a, b, c}, N = 5, and the algorithm is initialized
+        to m a's followed by n b's and j = 0, and terminates in gcd(m, n) a's
+        and j = N. The rules are<br />
+        <b>Rule 0:</b>
+        Seek "ab"; if found replace with "" and go to rule 1, otherwise go to
+        rule 2.<br />
+        <b>Rule 1:</b>
+        Seek ""; if found replace with "c" and go to rule 0, otherwise go to
+        rule 0.<br />
+        <b>Rule 2:</b>
+        Seek "a"; if found replace with "b" and go to rule 2, otherwise go to
+        rule 3.<br />
+        <b>Rule 3:</b>
+        Seek "c"; if found replace with "a" and go to rule 3, otherwise go to
+        rule 4.<br />
+        <b>Rule 0:</b>
+        Seek "b"; if found replace with "b" and go to rule 0, otherwise go to
+        rule 5.
+    </p>
+
+    <!--These two scripts are to enable LaTeX style math-->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>
