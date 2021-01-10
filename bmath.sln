@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "emulator", "emulator_projects\emulator\emulator.vcxproj", "{A2F4FF15-AE28-4DF2-86DF-79225410D3DF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_performance", "emulator_projects\test_performance\test_performance.vcxproj", "{E2F78A96-B28F-4CCC-ADC9-E3E0C472F43E}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "performance_plotter", "emulator_projects\performance_plotter\performance_plotter.pyproj", "{73A8EDD3-0E67-451E-86FB-06B98543115A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2F4FF15-AE28-4DF2-86DF-79225410D3DF}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{A2F4FF15-AE28-4DF2-86DF-79225410D3DF}.Debug|x64.ActiveCfg = Debug|x64
+		{A2F4FF15-AE28-4DF2-86DF-79225410D3DF}.Debug|x64.Build.0 = Debug|x64
+		{A2F4FF15-AE28-4DF2-86DF-79225410D3DF}.Debug|x86.ActiveCfg = Release|Win32
+		{A2F4FF15-AE28-4DF2-86DF-79225410D3DF}.Debug|x86.Build.0 = Release|Win32
+		{A2F4FF15-AE28-4DF2-86DF-79225410D3DF}.Release|Any CPU.ActiveCfg = Release|Win32
+		{A2F4FF15-AE28-4DF2-86DF-79225410D3DF}.Release|x64.ActiveCfg = Release|x64
+		{A2F4FF15-AE28-4DF2-86DF-79225410D3DF}.Release|x64.Build.0 = Release|x64
+		{A2F4FF15-AE28-4DF2-86DF-79225410D3DF}.Release|x86.ActiveCfg = Release|Win32
+		{A2F4FF15-AE28-4DF2-86DF-79225410D3DF}.Release|x86.Build.0 = Release|Win32
+		{E2F78A96-B28F-4CCC-ADC9-E3E0C472F43E}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{E2F78A96-B28F-4CCC-ADC9-E3E0C472F43E}.Debug|x64.ActiveCfg = Debug|x64
+		{E2F78A96-B28F-4CCC-ADC9-E3E0C472F43E}.Debug|x64.Build.0 = Debug|x64
+		{E2F78A96-B28F-4CCC-ADC9-E3E0C472F43E}.Debug|x86.ActiveCfg = Release|Win32
+		{E2F78A96-B28F-4CCC-ADC9-E3E0C472F43E}.Debug|x86.Build.0 = Release|Win32
+		{E2F78A96-B28F-4CCC-ADC9-E3E0C472F43E}.Release|Any CPU.ActiveCfg = Release|Win32
+		{E2F78A96-B28F-4CCC-ADC9-E3E0C472F43E}.Release|x64.ActiveCfg = Release|x64
+		{E2F78A96-B28F-4CCC-ADC9-E3E0C472F43E}.Release|x64.Build.0 = Release|x64
+		{E2F78A96-B28F-4CCC-ADC9-E3E0C472F43E}.Release|x86.ActiveCfg = Release|Win32
+		{E2F78A96-B28F-4CCC-ADC9-E3E0C472F43E}.Release|x86.Build.0 = Release|Win32
+		{73A8EDD3-0E67-451E-86FB-06B98543115A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73A8EDD3-0E67-451E-86FB-06B98543115A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{73A8EDD3-0E67-451E-86FB-06B98543115A}.Debug|x86.ActiveCfg = Release|Any CPU
+		{73A8EDD3-0E67-451E-86FB-06B98543115A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73A8EDD3-0E67-451E-86FB-06B98543115A}.Release|x64.ActiveCfg = Release|Any CPU
+		{73A8EDD3-0E67-451E-86FB-06B98543115A}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FAB56750-C173-4CAF-9EAC-555ED6305F77}
+	EndGlobalSection
+EndGlobal
