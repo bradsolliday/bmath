@@ -7,8 +7,24 @@
 </head>
 <body>
     <h1>Euclid Emulator</h1>
+    
+    <p>
+        <b>
+            Notice, this project and page is still a work in progress. I'm
+            putting it up so that at least the work I've done so far is visible
+            and to reduce the workload for when I implement additional aspects.
+        </b>
+    </p>
 
-    <h2>The Idea of The Algorithm</h2>
+    <h2>Introduction</h2>
+    <p>
+        Here you'll find a discussion of a model of effective algorithms as
+        find and replacement operations on strings, with an emphasis on
+        Euclid's algorithm for computing greatest common divisors, as well as a
+        comparison of the performance of various implementations.
+    </p>
+
+    <h2>A Formalization of the Concept of An Algorithm</h2>
     <p>
         In the summer of 2020 I had just cracked open Donald E. Knuth's <i>
             The Art of Computer Programming Vol. 1
@@ -31,6 +47,8 @@
         apply f to get a new state until our new state is an element of
         \(\Omega\). Then the algorithm is done.
     </p>
+
+    <h2>An Effective Restriction</h2>
     <p>
         This seems simple and reasonable enough of a model for algorithms, but
         Knuth quickly pointed out that this definition allows Q to contain
@@ -89,16 +107,17 @@
     <p>
         The last component of our quadruple, the function f, is then defined
         by applying the rule of a state to that state:<br />
-        If \(\theta_j\) does not occur in \(\sigma\):
+        &emsp;If \(\theta_j\) does not occur in \(\sigma\):
         $$f(\sigma,j) = (\sigma, n_j)$$
-        If \(\theta_j\) does occur in \(\sigma\):
+        &emsp;If \(\theta_j\) does occur in \(\sigma\):
         $$f(\sigma,j) = (\alpha\phi_j\omega, p_j)$$
         where \(\alpha\) is the shortest string such that
-        &emsp;\(\alpha\theta_j\omega=\sigma\).<br />
-        If j does not correspond to a rule, i.e., is N and our state is a
+        \(\alpha\theta_j\omega=\sigma\).<br />
+        &emsp;If j does not correspond to a rule, i.e., is N and our state is a
         terminal state:
         $$f(\sigma, N) = (\sigma, N)$$
     </p>
+    <h2>An Example: Euclid's Algorithm</h2>
     <p>
         Now, I don't know about you, but I found this to be quite a strange
         sort of algorithm. After finishing his description, Knuth simply
@@ -207,6 +226,42 @@
         <b>Rule 0:</b>
         Seek "b"; if found replace with "b" and go to rule 0, otherwise go to
         rule 5.
+    </p>
+
+    <h2>An Implementation</h2>
+    <p>
+        Once I had a workable form of the algorithm, I was finally able to
+        automate it with a program. It was fun and bizarre. While I knew it
+        should work and why, it's still a little magical to calculate gcd's
+        with letters. It was actually at this point (thinking I had explored
+        the problem to my satisfaction) that I discovered Knuth's superior
+        ruleset when I started the section problems.
+    </p>
+    <p>
+        Trying out his solution with my existing code dramatically improved the
+        performance, and it got me thinking? How might I improve the code
+        further?
+    </p>
+    <p>
+        When preparing for this wider scope, I had a few different ideas I
+        wanted to keep in mind as I wrote my code. More than anything, I wanted
+        to time and compare as many implementations as I could. Simply to get a
+        better idea of what sorts of optimizations were helpful and what
+        weren't.
+    </p>
+    <p>
+        This induced my second consideration, that I wanted to keep the code
+        modular, to avoid repeating myself between different implementations.
+        It was also my hope that the code could be more concise and clear by
+        not mixing unrelated ideas. I also saw this as a chance to try out some
+        of the new C++20 features (like concepts).
+    </p>
+    <p>
+        First of all, the process of reading and applying the rules from a
+        ruleset was indepdent of what those rules were, and so I wanted the
+        code to reflect that. I also didn't want the ruleset to be passed in
+        as an argument for the constructor for the emulatorRemembering past experiences, I didn't want to
+        lock myself in with a particular structure that the rele
     </p>
 
     <!--These two scripts are to enable LaTeX style math-->
