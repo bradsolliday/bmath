@@ -6,3 +6,7 @@ Some ideas for how I can improve the dev experience and existing projects.
 
 -Make it so that my html files are no longer static, but rather compressed for
  smaller webpage size (and thus faster loading).
+
+-Enforce 80 character width limit on html files so that it's easier to read
+ them in editors like visual studio that I don't yet have set to automatically
+ wrap lines which are too long.
