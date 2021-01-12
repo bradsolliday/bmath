@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["algo","A couple functions for calculating gcd's"]],"struct":[["CFrac","A sequence of integers [a0; a1, a2, a3, ...] where all but the first element must be positive."],["PCache","An object for calculating and caching consecutive prime numbers"]]});
