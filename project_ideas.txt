@@ -1,0 +1,26 @@
+Some ideas for projects I can do in the future.
+
+-Implement trick to calculate logs, square roots, and the like by exploiting
+ how the bytes of floats, when written as an int, form a number proportional
+ to the log somehow. This is also a chance to become better aquanted with
+ numerical precision and the like. (Oh, there's a wikipedia page on the fast
+ inverse square root that's relevant).
+
+-Create an interactive demo of the unique degree k polynomial given values at
+ k+1 distinct point. Like, the user would click on the graph and a polynomial
+ will be plotted passing through their clicked points. This would be done in
+ javascript.
+
+-One thing I would like to do is write code to calculate model the cache
+ layout and analyze compiled code to identify whether cache misses and the like
+ are occuring and whether the bus lines are being effectively used (like, to
+ simulate to see what percentage of the data being loaded from memory is
+ actually being used and what percent of memory accesses have the full width of
+ the bus line actually used). Would need it to be somewhat module to accomadate
+ the fact that different cache layouts are possible.
+
+-I never did finish that section for calculating eigenstates. Should
+ refamiliarize myself with that and finish it.
+
+-I should so something where I simulate balls on springs. Just to refamiliarize
+ myself with how it is done.
