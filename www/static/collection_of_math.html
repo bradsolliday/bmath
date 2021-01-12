@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Collection of Math</title>
+    <link href="stylesheets/standard.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <h1>Collection of Math</h1>
+
+    <h2>Introduction</h2>
+    <p>
+        I've always liked doing math. Perhaps it's empowering to be able to
+        make statements with complete confidence, or because it feels good to
+        learn something which has the potentital to be usefule someday, or it's
+        just because it's fun, like a game or a puzzle, and the previous
+        reasons are just excuses.
+    </p>
+    <p>
+        In any case, I become interested in a problem from time to time, and
+        I'd like the solution to exist somehwere other than my memory and
+        personal understanding. And so, I'll put them here.
+    </p>
+    <p>
+        At the moment, there's not much here, but you have to start somewhere
+        right?
+    </p>
+
+    <h2>Polynomials</h2>
+    <h3>Uniquely Identifying Polynomials by Finitely Many of Their Values</h3>
+    <p>
+        Polynomials come up a lot, and so I often feel an intellectual duty to
+        have a strong grasp on all of their properties. For example, it might
+        seem intuitive that one would need to know the value of a polynomial at
+        k+1 points and k+1 points only to uniquely identify a polynomial. After
+        all, degree k polynomials have k+1 degrees of freedom in their k+1
+        coefficients, and each degree of a polynomial allows an additional
+        "bend" with which to pass through a point of our choosing: Degree 0
+        polynomials can only pass through one value; degree 1 polynomials allow
+        us to tilt the line to pass through another value; 2 degrees allow us
+        to bend the line to pass through yet a third point of our choosing, and
+        so on.
+    </p>
+    <p>
+        This leads up to the following true claim: A degree k polynomial is
+        uniquely determined by its value at k+1 distinct points. Of course, for
+        my own personal satisfaction at least, a feeling that a statement
+        should be true is not enough; we need to prove it.
+    </p>
+    <h3>The Proof</h3>
+    <p>
+        <b>Lemma:</b> For every degree \(k\geq1\) polynomial
+        \(p(x) = a_kx^k + \dots + a_1x + a_0\), there exists a degree k-1
+        polynomial q(x) s.t. \(p(x)=(x-b)q(x) + p(b)\).
+    </p>
+    <p>
+        <b>Proof:</b> For the case of k = 1,
+        $$p(x)= a_1x + a_0 = a_1x - a_1b + a_1b + a_0 = (x-b)a_1 + p(b),$$
+        as claimed.<br />
+        &emsp;More generally, for k>1 and assuming the claim holds for k-1,
+        denote
+        $$\tilde{p}(x)=a_kx^{k-1} + a_{k-1}x^{k-2} + \dots + a_2x + a_1.$$
+        Since \(\tilde{p}\) is degree k-1, it follows that there exists degree
+        k-2 polynomial \(\tilde{q}\) s.t.
+        $$\tilde{p}(x) = (x-b)\tilde{q}(x) + \tilde{p}(b).$$
+        Hence,
+        $$\begin{align*}
+        p(x)=\tilde{p}(x)x + a_0
+        &= (x-b)\tilde{q}(x)x + x\tilde{p}(b) + a_0\\
+        &= (x-b)\tilde{q}(x)x + x\tilde{p}(b) - b\tilde{p}(b) + b\tilde{p}(b)
+        + a_0\\
+        &= (x-b)[\tilde{q}(x)x + \tilde{p}(b)] + b\tilde{p}(b) + a_0\\
+        &= (x-b)[\tilde{q}(x)x + \tilde{p}(b)] + p(b).
+        \end{align*}$$
+        Since \(\tilde{q}\) is degree k-2, \(\tilde{q}(x)x + \tilde{p}(b)\) is
+        degree k-1, and thus our claim follows by induction. \(\blacksquare\)
+    </p>
+    <p>
+    	It actually follows that the polynomial q in the above lemma does not
+    	just exist, but is unique. Since \((x-b)q(x) = p(x) - p(b)\), if we had
+    	two such q's, say \(q_1\) and \(q_2\), then
+    	$$(x-b)(q_1(x)-q_2(x)) = 0,$$
+    	implying \(q_1(x) = q_2(x)\) for all \(x \neq b\). But since
+    	polynomials are continuous, it then follows that \(q_1 = q_2\) at b as
+    	well.<br>
+    	&emsp;However, I didn't include this in the lemma because we'll
+    	actually be able to prove it latter once we have our main result, and I
+    	want it to be clear that the uniqueness from purely algebraic arguments
+    	without complicating matters my calling on the machinery of analysis.
+    </p>
+    <p>
+    	<b>Corollary:</b> If \(x_1,\dots,x_n\) are n distinct roots of a degree
+    	k polynomial p, then there exists a degree k-p polynomial q s.t.
+    	$$p(x)=(x-x_n)\dots(x-x_1)q(x).$$
+    </p>
+    <p>
+    	<b>Proof:</b> Our proof will be by induction. Let p be a degree k
+    	polynomial with root x_1. By the previous lemma, there exists degree
+    	k-1 polynomial q such that
+    	$$p(x) = (x-x_1)q(x) + p(x_1) = (x-x_1)q(x),$$
+    	where the second equality follows from the fact that \(x_1\) is a root
+    	of p. This proves that claim for when n=1, for all k.<br>
+    	&emsp;Now suppose the claim holds for n-1. Let p be degree k polynomial
+    	with distinct roots \(x_1,\dots,x_n\). Then, again by the previous
+    	lemma, there exists a degree k-1 polynomial \(\tilde{q}\) such that
+    	$$p(x)=(x-x_n)\tilde{q}(x) + p(x_n) = (x-x_n)\tilde{q}(x),$$
+    	much as before. Note, however, that if \(i\neq n\), then
+    	\(x_i\neq x_n\), and thus, since \(x_i\) is a root of p,
+    	$$0 = p(x_i) = (x_i - x_n)\tilde{q}(x_i)$$
+    	implies \(\tilde{q}(x_i)=0\), i.e., the other roots of p are also roots
+    	of \(\tilde{q}\). Moreover, since at this point we know the claim holds
+    	for degree k-1 polynomial \(\tilde{q}\) and its n-1 roots
+    	\(x_1,\dots,x_{n-1}\), we know there exists degree
+    	\((k-1)-(n-1)=k-n\) degree polynomial q sucht that
+    	$$\tilde{q}(x)=(x-x_{n-1})\dots(x-x_1)q(x),$$
+    	and thus
+    	$$p(x)=(x-x_n)\tilde{q}(x)=(x-x_n)(x_{n-1})\dots(x-x_1)q(x),$$
+    	as claimed. \(\blacksquare\)
+    </p>
+    <p>
+    	Note, as before, q is actualy unique, and we could have proved it at
+    	this point if we were willing to use the analytic properties of
+    	polynomials, but we can get by without if we just have a little
+    	patience.
+    </p>
+    <p>
+        <b>Corollary:</b> If a degree k polynomial has k+1 distinct roots, then
+        it is the zero polynomial.
+    </p>
+    <p>
+        <b>Proof:</b> Suppose p is a polynomial with k+1 distinct roots,
+        \(x_0, x_1, \dots, x_k\). Then, by our previous corollary, there exists
+        a degree \(k-k=0\) polynomial (i.e., a constant) q such that
+        $$p(x) = (x-x_1) \dots (x-x_k) q(x).$$
+        What's more is that since \(x_0\) is distinct from all the other roots,
+        $$0 = p(x_0) = (x_0-x_1) \dots (x_0-x_k) q(x_0)$$
+        implies \(q(x_0)=0\) and, since q is a constant, that \(q = 0\). Since
+        p is a multiple of q, it follows that p is also zero, as claimed.
+        \(\blacksquare\) 
+    </p>
+    <p>
+    	We are now ready to prove the proposition we were originally
+    	interested. For context, the only thing we need from the above is the
+        last corollary, as we'll need to show that a particular polynomial
+        with too many roots is zero. (I'm saying this just to save you from
+        wondering if they were needed elsewhere).
+    </p>
+    <p>
+    	<b>Proposition:</b> A degree k polynomial is uniquely determined by
+    	its value on k+1 distinct points.
+    </p>
+    <p>
+    	<b>Proof:</b> Let \(x_0,\dots,x_k\) be k+1 distinct points, and let
+    	\(p(x)=a_kx^k + \dots + a_1x + a_0\) be a polynomial. Then
+    	$$\begin{align*}
+    	p(x_0) &= a_kx_0^k + \dots + a_1x_0 + a_0\\
+    	p(x_1) &= a_kx_1^k + \dots + a_1x_1 + a_0\\
+    	&\vdots\\
+    	p(x_k) &= a_kx_k^k + \dots + a_1x_k + a_0
+    	\end{align*}$$
+    	which can be written in matrix form as
+    	$$\left[\begin{matrix}p(x_0)\\p(x_1)\\\vdots\\p(x_k)\end{matrix}\right]
+    	=
+    	\left[\begin{matrix}
+    	x_0^k & \dots & x_0 & 1\\
+    	x_1^k & \dots & x_1 & 1\\
+    	\vdots & & \vdots & \vdots\\
+    	x_k^k & \dots & x_k & 1
+    	\end{matrix}\right]
+    	\left[\begin{matrix}a_k\\ \vdots\\ a_1\\ a_0\end{matrix}\right]$$
+    	which implies \(a_k,\dots,a_0\) are uniquely determined by
+    	\(p(x_0),\dots,p(x_k)\) if the matrix is invertible. However, we
+    	check that the columns are linearly independent by supposing
+    	\(b_0,\dots,b_k\) are such that
+    	$$\left[\begin{matrix}0\\ \vdots\\ 0\end{matrix}\right]
+    	=
+    	b_k\left[\begin{matrix}x_0^k\\ \vdots \\ x_k^k\end{matrix}\right]
+        +
+        \dots
+        +
+        b_1\left[\begin{matrix}x_0\\ \vdots \\ x_k\end{matrix}\right]
+        +
+        b_0\left[\begin{matrix}1\\ \vdots \\ 1\end{matrix}\right].$$
+        This equation implies that \(x_0,\dots,x_k\) are k+1 distinct roots of
+        the degree k polynomial \(b_kx^k + \dots + b_1x + b_0\). However, by
+        the corollary, this is only possible if the polynomial is 0, and thus
+        that \(b_k = \dots = b_1 = b_0 = 0\), implying that the columns of our
+        matrix are linearly independent, and thus that the matrix is
+        invertible. Hence, p is uniqely determined as claimed. \(\blacksquare\)
+    </p>
+    <p>
+        The nice thing about this proof is it provides an easy method to
+        calculate the uniquely determined polynomial given our points. We just
+        need to plug the matrix and the value vector into a solver to get the
+        coefficients of the matrix.
+    </p>
+
+    <!--These two scripts are to enable LaTeX style math-->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>
