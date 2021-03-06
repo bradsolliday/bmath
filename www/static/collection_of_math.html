@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -50,8 +50,9 @@
     <h3>The Proof</h3>
     <p>
         <b>Lemma:</b> For every degree \(k\geq1\) polynomial
-        \(p(x) = a_kx^k + \dots + a_1x + a_0\), there exists a degree k-1
-        polynomial q(x) s.t. \(p(x)=(x-b)q(x) + p(b)\).
+        \(p(x) = a_kx^k + \dots + a_1x + a_0\) and every point b,
+        there exists a degree k-1 polynomial q(x) s.t.
+        \(p(x)=(x-b)q(x) + p(b)\).
     </p>
     <p>
         <b>Proof:</b> For the case of k = 1,
@@ -95,7 +96,7 @@
     </p>
     <p>
         <b>Proof:</b> Our proof will be by induction. Let p be a degree k
-        polynomial with root x_1. By the previous lemma, there exists degree
+        polynomial with root \(x_1\). By the previous lemma, there exists degree
         k-1 polynomial q such that
         $$p(x) = (x-x_1)q(x) + p(x_1) = (x-x_1)q(x),$$
         where the second equality follows from the fact that \(x_1\) is a root
@@ -111,14 +112,14 @@
         of \(\tilde{q}\). Moreover, since at this point we know the claim holds
         for degree k-1 polynomial \(\tilde{q}\) and its n-1 roots
         \(x_1,\dots,x_{n-1}\), we know there exists degree
-        \((k-1)-(n-1)=k-n\) degree polynomial q sucht that
+        \((k-1)-(n-1)=k-n\) degree polynomial q such that
         $$\tilde{q}(x)=(x-x_{n-1})\dots(x-x_1)q(x),$$
         and thus
-        $$p(x)=(x-x_n)\tilde{q}(x)=(x-x_n)(x_{n-1})\dots(x-x_1)q(x),$$
+        $$p(x)=(x-x_n)\tilde{q}(x)=(x-x_n)(x-x_{n-1})\dots(x-x_1)q(x),$$
         as claimed. \(\blacksquare\)
     </p>
     <p>
-        Note, as before, q is actualy unique, and we could have proved it at
+        Note, as before, q is actually unique, and we could have proved it at
         this point if we were willing to use the analytic properties of
         polynomials, but we can get by without if we just have a little
         patience.
@@ -192,14 +193,14 @@
         The nice thing about this proof is it provides an easy method to
         calculate the uniquely determined polynomial given our points. We just
         need to plug the matrix and the value vector into a solver to get the
-        coefficients of the matrix.
+        coefficients of the polynomial.
     </p>
     <p>
         Also, recall how we put off proving that the quotient in the division
         algorithm from the lemma was unique. We were able to see that it was
         unique up to finitely many points, but we stopped there. But now,
         armed with the propisition, we can note that since the quotients 
-        \(q_1\) and \(q_2\) match eachother at k points (an infinitely many
+        \(q_1\) and \(q_2\) match eachother at k points (and infinitely many
         more for that matter), they must be the same polynomial.
     </p>
     <p>
