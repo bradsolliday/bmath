@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -25,7 +25,13 @@
         At the moment, there's not much here, but you have to start somewhere
         right?
     </p>
+    <p>
+    	Index:<br>
+	<a href="collection_of_math.html#polynomials">Polynomials</a><br>
+	<a href="collection_of_math.html#algorithms">Algorithms</a>
+    </p>
 
+    <a name="polynomials">
     <h2>Polynomials</h2>
     <h3>Uniquely Identifying Polynomials by Finitely Many of Their Values</h3>
     <p>
@@ -50,8 +56,9 @@
     <h3>The Proof</h3>
     <p>
         <b>Lemma:</b> For every degree \(k\geq1\) polynomial
-        \(p(x) = a_kx^k + \dots + a_1x + a_0\), there exists a degree k-1
-        polynomial q(x) s.t. \(p(x)=(x-b)q(x) + p(b)\).
+        \(p(x) = a_kx^k + \dots + a_1x + a_0\) and every point b,
+        there exists a degree k-1 polynomial q(x) s.t.
+        \(p(x)=(x-b)q(x) + p(b)\).
     </p>
     <p>
         <b>Proof:</b> For the case of k = 1,
@@ -95,7 +102,7 @@
     </p>
     <p>
         <b>Proof:</b> Our proof will be by induction. Let p be a degree k
-        polynomial with root x_1. By the previous lemma, there exists degree
+        polynomial with root \(x_1\). By the previous lemma, there exists degree
         k-1 polynomial q such that
         $$p(x) = (x-x_1)q(x) + p(x_1) = (x-x_1)q(x),$$
         where the second equality follows from the fact that \(x_1\) is a root
@@ -111,14 +118,14 @@
         of \(\tilde{q}\). Moreover, since at this point we know the claim holds
         for degree k-1 polynomial \(\tilde{q}\) and its n-1 roots
         \(x_1,\dots,x_{n-1}\), we know there exists degree
-        \((k-1)-(n-1)=k-n\) degree polynomial q sucht that
+        \((k-1)-(n-1)=k-n\) degree polynomial q such that
         $$\tilde{q}(x)=(x-x_{n-1})\dots(x-x_1)q(x),$$
         and thus
-        $$p(x)=(x-x_n)\tilde{q}(x)=(x-x_n)(x_{n-1})\dots(x-x_1)q(x),$$
+        $$p(x)=(x-x_n)\tilde{q}(x)=(x-x_n)(x-x_{n-1})\dots(x-x_1)q(x),$$
         as claimed. \(\blacksquare\)
     </p>
     <p>
-        Note, as before, q is actualy unique, and we could have proved it at
+        Note, as before, q is actually unique, and we could have proved it at
         this point if we were willing to use the analytic properties of
         polynomials, but we can get by without if we just have a little
         patience.
@@ -166,8 +173,7 @@
         x_1^k & \dots & x_1 & 1\\
         \vdots & & \vdots & \vdots\\
         x_k^k & \dots & x_k & 1
-        \end{matrix}\right]
-        \left[\begin{matrix}a_k\\ \vdots\\ a_1\\ a_0\end{matrix}\right]$$
+        \end{matrix}\right] \left[\begin{matrix}a_k\\ \vdots\\ a_1\\ a_0\end{matrix}\right]$$
         which implies \(a_k,\dots,a_0\) are uniquely determined by
         \(p(x_0),\dots,p(x_k)\) if the matrix is invertible. However, we
         check that the columns are linearly independent by supposing
@@ -192,20 +198,72 @@
         The nice thing about this proof is it provides an easy method to
         calculate the uniquely determined polynomial given our points. We just
         need to plug the matrix and the value vector into a solver to get the
-        coefficients of the matrix.
+        coefficients of the polynomial.
     </p>
     <p>
         Also, recall how we put off proving that the quotient in the division
         algorithm from the lemma was unique. We were able to see that it was
         unique up to finitely many points, but we stopped there. But now,
         armed with the propisition, we can note that since the quotients 
-        \(q_1\) and \(q_2\) match eachother at k points (an infinitely many
+        \(q_1\) and \(q_2\) match eachother at k points (and infinitely many
         more for that matter), they must be the same polynomial.
     </p>
     <p>
         In a way, this indicates that resorting to limits and continuity is
         overkill, as that requires that the polynomials match at an infinite
         number of points, rather than the finite number we needed.
+    </p>
+
+    <a name="algorithms"></a>
+    <h2>Algorithms</h2>
+    <h3>Inverting Continuous Real Functions of Real Variables</h3>
+
+    <h4>The Idea</h4>
+    <p>
+        From time to time we're interested in inverting functions. Sometimes
+        this is easy, like when \(f(x)= x^2\) on the interval \([0, \infty)\),
+        but other times this is hard, as it is for \(f(x) = x + sin(x).\)
+        In these cases where you have a hard time coming up with a clsoed form
+        solution, it helps to have a way to numerically calculate the answer.
+        What follows is a simple way to do so.
+    </p>
+    <p>
+        The idea is to note that continuous real functions of real variables
+        must be strictly monotone on any interval it is invertible on.
+        Intuitively, this is because if the function starts increasing, it
+        can't decrease without either passing through values it has already
+        evaluated to (violating invertibility) or performing a discontinous
+        jump over the previously evaluated points.
+    </p>
+    <p>
+        Since the function must be strictly monotone, we can almost
+        think of the function as a sorted array, except rather than interger
+        indices, we have a real index which is the function argument. This
+        means we can perform something like the binary search algorithm to
+        evaluate the function's inverse.
+    </p>
+    <p>
+        The only hiccup is that whereas the binary search algorithm searches
+        finite arrays, and thus is guarenteed to terminate, we are searching a
+        function defined on an interval with infinitely many points, and thus
+        have no guarentee we'll ever find the exact inverse of the function.
+        But this is not a real cause for concern, as we can just truncate the
+        search once we've found an answer which is close enough to what we're
+        looking for. Since we're solving the problem numerically, we should
+        expect to only find an approximate solution anyway.
+    </p>
+
+    <p>
+        The above I think should suffice for a quick overview. For a more
+        detailed explanation see
+        <a href="invert_function.html">this page</a>.
+    </p>
+
+    <p>
+        If anything about the formating seems different, it's because I tried
+        experimenting with jupyter notebook to generate the page. You can
+        download the jupyter notebook used to generate the file 
+        <a href="invert_function.ipynb" download>here</a>.
     </p>
 
     <!--These two scripts are to enable LaTeX style math-->
