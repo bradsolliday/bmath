@@ -10,7 +10,7 @@ module.exports = {
     asyncWebAssembly: true,
   },
   entry: {
-    index: "./js/index.js",
+    index: "./js/index.tsx",
   },
   output: {
     path: dist,
@@ -21,6 +21,9 @@ module.exports = {
       directory: path.join(__dirname, "dist"),
     },
   },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js', '.jsx'],
+  },
   module: {
     rules: [
       {
@@ -30,6 +33,11 @@ module.exports = {
           loader: "babel-loader",
         },
       },
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: 'ts-loader',
+      }
     ],
   },
   plugins: [
