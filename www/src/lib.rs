@@ -119,6 +119,11 @@ impl NaivePCache {
 
 }
 
+#[wasm_bindgen]
+pub fn wasm_memory() -> JsValue {
+    wasm_bindgen::memory()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

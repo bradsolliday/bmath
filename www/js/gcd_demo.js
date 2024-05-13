@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {gcd, gcd_factors} from "../pkg/index_bg.js";
+import {gcd, gcd_factors} from "../pkg/index.js";
 import {BinOp} from "./components/binop.jsx";
 
 function gcd_message(m, n, d) {

@@ -1,4 +1,5 @@
-BMATH=~/"Digital Library"/projects/bmath
+#!/usr/bin/env bash
+BMATH=$(realpath $(pwd)/..)
 
 rm -rf "$BMATH"/www/static/doc
 (cd "$BMATH"; cargo doc)

@@ -1,5 +1,4 @@
-import {WaveGridF32} from "../pkg/index_bg.js";
-import {memory} from "../pkg/index_bg";
+import {WaveGridF32, wasm_memory} from "../pkg/index.js";
 import {DataPlotter} from "./data_plotter.js";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -25,7 +24,7 @@ function colorMap(f32) {
 
 const canvas = document.getElementById("my-canvas");
 let grid = WaveGridF32.new();
-let plotter = new DataPlotter(grid, memory, canvas,
+let plotter = new DataPlotter(grid, wasm_memory(), canvas,
                     colorMap, Float32Array);
 
 ReactDOM.render(

@@ -1,9 +1,8 @@
-import {nth_prime} from "../pkg/index_bg.js";
 import React from "react";
 import ReactDOM from "react-dom";
 import {Expandable} from "./components/expandable.jsx";
 import {PrimeCalculator} from "./components/prime_calculator.jsx";
-import {PCache, NaivePCache} from "../pkg/index_bg.js";
+import {PCache, NaivePCache} from "../pkg/index.js";
 
 ReactDOM.render(<p>Starting calculation of prime 300</p>, document.getElementById("primes"));
 
