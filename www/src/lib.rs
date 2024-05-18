@@ -7,11 +7,10 @@ mod wave_grid_f32;
 pub use wave_grid_f32::WaveGridF32;
 
 //use plottable::Plottable;
-use wasm_bindgen::prelude::*;
 use bmath::algo::gcd as gcd_impl;
 use bmath::algo::gcd_factors as gcd_factors_impl;
 use bmath::PCache as PCacheImpl;
-
+use wasm_bindgen::prelude::*;
 
 // When the `wee_alloc` feature is enabled, this uses `wee_alloc` as the global
 // allocator.
@@ -23,7 +22,7 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[wasm_bindgen]
 pub struct PCache {
-    cache: PCacheImpl
+    cache: PCacheImpl,
 }
 
 #[wasm_bindgen]
@@ -35,16 +34,15 @@ pub fn gcd(m: u32, n: u32) -> u32 {
 pub struct GCDCoefficients {
     gcd: isize,
     a: isize,
-    b: isize
+    b: isize,
 }
 
 #[wasm_bindgen]
 impl GCDCoefficients {
-    
     pub fn gcd(&self) -> isize {
         self.gcd
     }
-    
+
     pub fn a(&self) -> isize {
         self.a
     }
@@ -54,24 +52,18 @@ impl GCDCoefficients {
     }
 }
 
-
 #[wasm_bindgen]
 pub fn gcd_factors(m: isize, n: isize) -> GCDCoefficients {
     let (d, a, b) = gcd_factors_impl(m, n);
-    GCDCoefficients {
-        gcd: d,
-        a,
-        b
-    }
+    GCDCoefficients { gcd: d, a, b }
 }
 
 #[wasm_bindgen]
 impl PCache {
-
     pub fn new(bufcap: usize) -> PCache {
         console_error_panic_hook::set_once();
         PCache {
-            cache: PCacheImpl::new(bufcap)
+            cache: PCacheImpl::new(bufcap),
         }
     }
 
@@ -83,16 +75,15 @@ impl PCache {
 #[wasm_bindgen]
 pub struct NaivePCache {
     primes: Vec<usize>,
-    max_checked: usize
+    max_checked: usize,
 }
 
 #[wasm_bindgen]
 impl NaivePCache {
-
     pub fn new() -> NaivePCache {
         NaivePCache {
             primes: Vec::new(),
-            max_checked: 1
+            max_checked: 1,
         }
     }
 
@@ -116,7 +107,6 @@ impl NaivePCache {
         }
         self.primes[n - 1]
     }
-
 }
 
 #[wasm_bindgen]

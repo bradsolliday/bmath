@@ -1,4 +1,3 @@
-
 //! A couple functions for calculating gcd's
 
 use num_traits::PrimInt;
@@ -11,20 +10,26 @@ pub fn gcd<I: PrimInt>(mut m: I, mut n: I) -> I {
     debug_assert!(m > zero && n > zero, "Arguments must be positive");
     if n > m {
         n = n % m;
-        if n == zero { return m; }
+        if n == zero {
+            return m;
+        }
     }
     loop {
         m = m % n;
-        if m == zero { return n; }
+        if m == zero {
+            return n;
+        }
         n = n % m;
-        if n == zero { return m; }
+        if n == zero {
+            return m;
+        }
     }
 }
 
 /// Returns (d, a, b) where d is the gcd of n and m, and
 /// a and b such that a*m + b*n = d.
 /// # Precondition
-/// m and n are positive. 
+/// m and n are positive.
 ///
 /// # Example
 ///
@@ -55,32 +60,37 @@ pub fn gcd_factors(mut m: isize, mut n: isize) -> (isize, isize, isize) {
     if n > m {
         q = n / m; // Note, these two divisons are optimized to be
         n = n % m; // one instruction in assembly
-        // M true
-        if n == 0 { return (m, x, y); }
-        a = a - q*x;
-        b = b - q*y;
+                   // M true
+        if n == 0 {
+            return (m, x, y);
+        }
+        a = a - q * x;
+        b = b - q * y;
         // M still true, N made true
     }
     loop {
         // M and N true
         q = m / n;
-        m = m % n; 
+        m = m % n;
         // N true
-        if m == 0 { return (n, a, b); }
-        x = x - q*a;
-        y = y - q*b;
+        if m == 0 {
+            return (n, a, b);
+        }
+        x = x - q * a;
+        y = y - q * b;
         // N still true, M made true
-        
+
         q = n / m;
         n = n % m;
         // M true
-        if n == 0 { return (m, x, y); }
-        a = a - q*x;
-        b = b - q*y;
+        if n == 0 {
+            return (m, x, y);
+        }
+        a = a - q * x;
+        b = b - q * y;
         // M still true, N made true
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -112,7 +122,7 @@ mod tests {
         for m in 1..200 {
             for n in 1..200 {
                 let (d, a, b) = gcd_factors(m, n);
-                assert_eq!(a*m + b*n, d);
+                assert_eq!(a * m + b * n, d);
                 is_gcd(d as u64, m as u64, n as u64);
             }
         }

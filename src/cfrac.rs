@@ -1,6 +1,5 @@
-
-use num_traits::PrimInt;
 use num::rational::Ratio;
+use num_traits::PrimInt;
 use std::fmt;
 
 /// A sequence of integers [a0; a1, a2, a3, ...] where all but the first
@@ -16,17 +15,16 @@ use std::fmt;
 ///
 /// If representing a rational number, the sequence is finite and terminates
 /// in a value greater than 1. If representing a irrational number, the
-/// sequence is infinite. Every real number r is uniquely identified by 
-/// a continued fraction 
+/// sequence is infinite. Every real number r is uniquely identified by
+/// a continued fraction
 #[derive(Debug, PartialEq)]
 pub struct CFrac<I: PrimInt> {
-    values: Vec<I>
+    values: Vec<I>,
 }
 
 // I should make it iterable. If for some reason I wanted to do that. Would be
 // easy considering my implementation.
-impl <I: num::Integer + PrimInt> CFrac<I> {
-
+impl<I: num::Integer + PrimInt> CFrac<I> {
     /// Returns the continued fraction (CFrac) of the rational number
     /// p / q
     ///
@@ -36,7 +34,7 @@ impl <I: num::Integer + PrimInt> CFrac<I> {
     /// use num::rational::Ratio;
     ///
     /// let (p, q) = (-4, 5);
-    /// 
+    ///
     /// let cf = CFrac::<i64>::from_fraction(p, q);
     ///
     /// assert_eq!(Ratio::from(&cf), Ratio::new(p,q));
@@ -56,11 +54,15 @@ impl <I: num::Integer + PrimInt> CFrac<I> {
             a = p / q;
             p = p % q;
             values.push(a);
-            if p == zero { break; }
+            if p == zero {
+                break;
+            }
             a = q / p;
             q = q % p;
             values.push(a);
-            if q == zero { break; }
+            if q == zero {
+                break;
+            }
         }
         CFrac { values }
     }
@@ -87,7 +89,7 @@ impl <I: num::Integer + PrimInt> CFrac<I> {
 
     /// Returns a vector of Ratios representing the continued fraction's
     /// convergents.
-    /// 
+    ///
     /// The kth convergent of a continued fraction [a0; a1, a2, ..., an] is
     /// [a0; a1, a2, ..., ak].
     ///
@@ -99,7 +101,7 @@ impl <I: num::Integer + PrimInt> CFrac<I> {
     /// and so on.
     ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use bmath::CFrac;
     /// use num::rational::Ratio;
@@ -109,7 +111,7 @@ impl <I: num::Integer + PrimInt> CFrac<I> {
     /// // Their ratio is an approximation of the golden ratio
     /// let golden = CFrac::from_fraction(317811, 196418);
     ///
-    /// // golden = [1; 1, ..., 1, 1, 2] 
+    /// // golden = [1; 1, ..., 1, 1, 2]
     ///
     /// let fib_ratios = golden.convergents();
     ///
@@ -143,7 +145,7 @@ impl <I: num::Integer + PrimInt> CFrac<I> {
     // dependent on ak.
     // If you try this by hand with a few examples, you see that the
     // convergent's numerator and denomator depend linearly on ak.
-    // 
+    //
     // So let's see if we can prove this and define
     // Nk = N{k-1}*ak + N{k-2}
     // Dk = D{k-1}*ak + D{k-2}
@@ -168,48 +170,45 @@ impl <I: num::Integer + PrimInt> CFrac<I> {
     //                       / (Dk*a{k+1} + D{k-1}
     //
     //                       = N{k / Dk
-    // 
+    //
     // By induction, [a0; a1, ..., ak] = Nk / Dk, and we can use the simple
     // formula defined above to calculate Nk and Dk.
-    // 
+    //
     // NOTE: If ak = 1 for all k, then the expressions for Nk and Dk become
     // that of successive elements of the fibonacci sequence. Since both
     // sequences start with (in a manner) 0, 1, we see that the convergents
     // of a continued fraction of the form [1; 1, 1, 1, ...] are the ratios
     // of consecutive fibonacci numbers.
     pub fn convergents(&self) -> Vec<Ratio<I>> {
-        let (mut n1, mut n0) = (I::one(),  I::zero());
+        let (mut n1, mut n0) = (I::one(), I::zero());
         let (mut d1, mut d0) = (I::zero(), I::one());
-        let mut convergent_vec: Vec<Ratio<I>> =
-            Vec::<Ratio<I>>::with_capacity(self.values.len());
+        let mut convergent_vec: Vec<Ratio<I>> = Vec::<Ratio<I>>::with_capacity(self.values.len());
         let mut i = 0;
         while i + 1 < self.values.len() {
             // Loop is partially unrolled to avoid temporary variable for swap
             let a = self.values[i];
-            n0 = n1*a + n0;
-            d0 = d1*a + d0;
+            n0 = n1 * a + n0;
+            d0 = d1 * a + d0;
             convergent_vec.push(Ratio::new(n0, d0));
             i += 1;
 
             let a = self.values[i];
-            n1 = n0*a + n1;
-            d1 = d0*a + d1;
+            n1 = n0 * a + n1;
+            d1 = d0 * a + d1;
             convergent_vec.push(Ratio::new(n1, d1));
             i += 1;
         }
         if i < self.values.len() {
             let a = self.values[i];
-            n0 = n1*a + n0;
-            d0 = d1*a + d0;
+            n0 = n1 * a + n0;
+            d0 = d1 * a + d0;
             convergent_vec.push(Ratio::new(n0, d0));
         }
         convergent_vec
     }
-
 }
 
-impl <I: num::Integer + PrimInt> From<&CFrac<I>> for Ratio<I> {
-
+impl<I: num::Integer + PrimInt> From<&CFrac<I>> for Ratio<I> {
     fn from(cf: &CFrac<I>) -> Self {
         let mut vals = cf.values.iter().rev();
         let mut num = *vals.next().unwrap(); // Cannot fail
@@ -222,18 +221,11 @@ impl <I: num::Integer + PrimInt> From<&CFrac<I>> for Ratio<I> {
         Ratio::new(num, den)
     }
 }
-            
 
-
-impl <I: PrimInt + fmt::Display> fmt::Display for CFrac<I> {
-
+impl<I: PrimInt + fmt::Display> fmt::Display for CFrac<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let vals: Vec<String> =
-            self.values
-            .iter()
-            .map(|i| i.to_string())
-            .collect();
-        let s = [vals[0..2].join("; "), vals[2..].join(", ")].join(", "); 
+        let vals: Vec<String> = self.values.iter().map(|i| i.to_string()).collect();
+        let s = [vals[0..2].join("; "), vals[2..].join(", ")].join(", ");
         write!(f, "[{}]", s)
     }
 }

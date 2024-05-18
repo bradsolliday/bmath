@@ -1,6 +1,8 @@
-
 #[derive(Clone, PartialEq)]
-enum  Num { Prime, Composite }
+enum Num {
+    Prime,
+    Composite,
+}
 
 /// An object for calculating and caching consecutive prime numbers
 ///
@@ -36,7 +38,7 @@ enum  Num { Prime, Composite }
 /// but rather starts after the last set of checked values. The real reason we
 /// needed to pair our primes with their next unchecked multiple was because
 /// we need to know where we left off when we start a new buffer after having
-/// filled out an old one. 
+/// filled out an old one.
 ///
 /// For the details you can examine the source code. For example, the primes
 /// are not actually paired with their next multiple, but rather the index of
@@ -70,7 +72,7 @@ enum  Num { Prime, Composite }
 /// let cache: Vec<usize> = pc.cached_primes();
 ///
 /// assert_eq!(cache.len(), 0);
-/// 
+///
 /// assert_eq!(pc.nth_prime(1), 2);
 /// assert_eq!(pc.nth_prime(2), 3);
 /// assert_eq!(pc.nth_prime(3), 5);
@@ -79,7 +81,7 @@ enum  Num { Prime, Composite }
 /// assert_eq!(pc.nth_prime(308), 2029);
 ///
 /// let cache: Vec<usize> = pc.cached_primes();
-/// 
+///
 /// assert!(cache.len() >= 308);
 ///
 /// assert_eq!(cache[0], 2);
@@ -101,21 +103,19 @@ pub struct PCache {
     // buffer[primes[n-1].1] represents this first multiple of primes[n-1].0
     // meeting the above requirements. buffer "buffers" the steam of natural
     // numbers.
-
     primes: Vec<(usize, usize)>, // (prime, offset)
     max_checked: usize,
     buffer: Vec<Num>,
 }
 
 impl PCache {
-
     /// Returns a new empty PCache with buffer capacity of bufcap.
-    /// 
+    ///
     /// The larger bufcap the faster a prime will be executed (up until
     /// bufcap get's close to the value of the largest prime calculated)
     /// However, an array of length bufcap will be allocated, so memory
     /// usaged will go up.
-    /// 
+    ///
     /// No primes will be calculated until a prime is requested from it.
     ///
     /// # Examples
@@ -135,10 +135,9 @@ impl PCache {
         // Initializing primes with capcity doesn't seem to have a noticeable
         // affect
         PCache {
-
             primes: Vec::new(),
             buffer: vec![Num::Prime; bufcap],
-            max_checked: 1 // 2 is the first unchecked value
+            max_checked: 1, // 2 is the first unchecked value
         }
     }
 
@@ -161,14 +160,13 @@ impl PCache {
     /// assert_eq!(11, primes.nth_prime(5));
     /// ```
     pub fn nth_prime(&mut self, n: usize) -> usize {
-        assert!( n > 0, "0th prime not well defined");
+        assert!(n > 0, "0th prime not well defined");
         while n > self.primes.len() {
-            self.check_next(
-                if self.max_checked < self.buffer.len() {
-                    self.max_checked + 1
-                } else {
-                    self.buffer.len()
-                });
+            self.check_next(if self.max_checked < self.buffer.len() {
+                self.max_checked + 1
+            } else {
+                self.buffer.len()
+            });
         }
         self.primes[n - 1].0
     }
@@ -196,19 +194,24 @@ impl PCache {
     /// assert_eq!(cached_vals[4], 11);
     /// ```
     pub fn cached_primes(&self) -> Vec<usize> {
-        self.primes.iter().map(|(p,_)| *p).collect()
+        self.primes.iter().map(|(p, _)| *p).collect()
     }
 
     // Checks the next length numbers after self.max_checked and adds any
     // found prime numbers to self.primes.
     fn check_next(&mut self, length: usize) {
-
         // max_checked + 1 is the smallest next prime we might find. If
         // max_checked + 1 < k, then it has a multiple within the buffer
-        debug_assert!(self.max_checked + 1 >= length, "buffer may contain \
-        multiples of it's own primes. Choose a smaller buffer size");
-        debug_assert!(length <= self.buffer.capacity(), "length of segment \
-        to check larger than buffer capacity");
+        debug_assert!(
+            self.max_checked + 1 >= length,
+            "buffer may contain \
+        multiples of it's own primes. Choose a smaller buffer size"
+        );
+        debug_assert!(
+            length <= self.buffer.capacity(),
+            "length of segment \
+        to check larger than buffer capacity"
+        );
 
         // Remove composite numbers from self.buffer
         for i in 0..self.primes.len() {
@@ -226,7 +229,7 @@ impl PCache {
                 let new_prime = self.max_checked + 1 + offset;
                 let new_offset = match new_prime.checked_mul(new_prime) {
                     Some(p2) => p2 - self.max_checked - length - 1,
-                    None     => usize::MAX
+                    None => usize::MAX,
                 };
                 //let new_offset =
                 //    offset + new_prime * new_prime - new_prime - length;
@@ -237,24 +240,23 @@ impl PCache {
         }
         self.max_checked += length;
     }
-
 }
-
 
 #[cfg(test)]
 mod tests {
     use super::PCache;
 
-    const PRIMES: [usize; 32] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37,
-    41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109,
-    113, 127, 131];
+    const PRIMES: [usize; 32] = [
+        2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89,
+        97, 101, 103, 107, 109, 113, 127, 131,
+    ];
 
     const P1000: usize = 7919; // The 1000th prime according to the internet
 
     #[test]
     fn test_nth_prime() {
         let mut pc = PCache::new(1000);
-        assert_eq!(pc.nth_prime(2) , PRIMES[1]);
+        assert_eq!(pc.nth_prime(2), PRIMES[1]);
         assert_eq!(pc.nth_prime(15), PRIMES[14]);
         assert_eq!(pc.nth_prime(30), PRIMES[29]);
         assert_eq!(pc.nth_prime(11), PRIMES[10]);

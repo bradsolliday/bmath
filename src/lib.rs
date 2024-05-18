@@ -1,4 +1,3 @@
-
 //! This crate contains code written by Bradley Solliday for the purpose of
 //! learning rust, demoing cool ideas, and getting better at programming more
 //! generally.
@@ -11,11 +10,11 @@
 //! second kind" of a given real number. This also ties in to the fibonacci
 //! numbers. Make sure to check out the source code.
 
-extern crate num_traits;
 extern crate num;
+extern crate num_traits;
 
-mod primes;
 mod cfrac;
+mod primes;
 
 pub mod algo;
 pub use cfrac::CFrac;
